@@ -1,0 +1,13 @@
+﻿<?xml version="1.0"?>
+<foam xmlns="http://gefvert.org/xsd/foam">
+  <providers>
+    <provider/>
+  </providers>
+  <jobs>
+    <job name="test">
+      <fetch source="d:\temp\foam-in" mask="*.jpg"/>
+      <shrink-photo pixel-limit="65536"/>
+      <store target="d:\temp\foam-out" overwrite="if-newer"/>
+    </job>
+  </jobs>
+</foam>

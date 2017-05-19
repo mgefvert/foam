@@ -1,0 +1,58 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.6
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Foam", "Foam\Foam.csproj", "{8FE2B7AF-EBD4-42B3-AC05-1069706D0FD9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetCommons", "..\DotNetCommons\DotNetCommons\DotNetCommons.csproj", "{A86D8B8B-D601-4EB9-AA0A-E03372ACC104}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Foam.API", "Foam.API\Foam.API.csproj", "{3D4BDE90-D993-4133-A5B3-9FD114F89C9B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Foam.Extensions.AV", "Foam.Extensions.AV\Foam.Extensions.AV.csproj", "{F0117E8F-3B85-42F7-A2D1-BCEE5BCD03E8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Foam.Extensions.AWS", "Foam.Extensions.AWS\Foam.Extensions.AWS.csproj", "{7B8C83B0-97A0-45D4-B072-7A2AE8AB4847}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Foam.API.Test", "Foam.API.Test\Foam.API.Test.csproj", "{AAFDE0CF-D99A-4FE6-8712-0EB4942CAA38}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetCommons.WinForms", "..\DotNetCommons\DotNetCommons.WinForms\DotNetCommons.WinForms.csproj", "{716AE81D-1017-462D-A5CD-5C57A68D0C0C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8FE2B7AF-EBD4-42B3-AC05-1069706D0FD9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8FE2B7AF-EBD4-42B3-AC05-1069706D0FD9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8FE2B7AF-EBD4-42B3-AC05-1069706D0FD9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8FE2B7AF-EBD4-42B3-AC05-1069706D0FD9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A86D8B8B-D601-4EB9-AA0A-E03372ACC104}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A86D8B8B-D601-4EB9-AA0A-E03372ACC104}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A86D8B8B-D601-4EB9-AA0A-E03372ACC104}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A86D8B8B-D601-4EB9-AA0A-E03372ACC104}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D4BDE90-D993-4133-A5B3-9FD114F89C9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D4BDE90-D993-4133-A5B3-9FD114F89C9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D4BDE90-D993-4133-A5B3-9FD114F89C9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D4BDE90-D993-4133-A5B3-9FD114F89C9B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F0117E8F-3B85-42F7-A2D1-BCEE5BCD03E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F0117E8F-3B85-42F7-A2D1-BCEE5BCD03E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F0117E8F-3B85-42F7-A2D1-BCEE5BCD03E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F0117E8F-3B85-42F7-A2D1-BCEE5BCD03E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B8C83B0-97A0-45D4-B072-7A2AE8AB4847}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B8C83B0-97A0-45D4-B072-7A2AE8AB4847}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B8C83B0-97A0-45D4-B072-7A2AE8AB4847}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B8C83B0-97A0-45D4-B072-7A2AE8AB4847}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AAFDE0CF-D99A-4FE6-8712-0EB4942CAA38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AAFDE0CF-D99A-4FE6-8712-0EB4942CAA38}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AAFDE0CF-D99A-4FE6-8712-0EB4942CAA38}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AAFDE0CF-D99A-4FE6-8712-0EB4942CAA38}.Release|Any CPU.Build.0 = Release|Any CPU
+		{716AE81D-1017-462D-A5CD-5C57A68D0C0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{716AE81D-1017-462D-A5CD-5C57A68D0C0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{716AE81D-1017-462D-A5CD-5C57A68D0C0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{716AE81D-1017-462D-A5CD-5C57A68D0C0C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,75 @@
+﻿<?xml version="1.0"?>
+<xs:schema 
+  xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+  xmlns="http://gefvert.org/xsd/foam" 
+  targetNamespace="http://gefvert.org/xsd/foam"
+  elementFormDefault="qualified">
+
+  <!-- root node -->
+  <xs:element name="foam">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="providers" type="providersType" minOccurs="0" maxOccurs="1"/>
+        <xs:element name="jobs" type="jobsType" minOccurs="0" maxOccurs="1"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <!-- providers node -->
+  <xs:complexType name="providersType">
+    <xs:sequence>
+      <xs:element name="provider" type="providerType" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- provider node -->
+  <xs:complexType name="providerType">
+    <xs:sequence>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- jobs node -->
+  <xs:complexType name="jobsType">
+    <xs:sequence>
+      <xs:element name="job" minOccurs="0" maxOccurs="unbounded" type="jobType"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- job node -->
+  <xs:complexType name="jobType">
+    <xs:sequence>
+      <xs:group ref="commandType" minOccurs="1" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:attribute name="name" use="required" type="xs:string"></xs:attribute>
+  </xs:complexType>
+
+  <!-- command node -->
+  <xs:group name="commandType">
+    <xs:choice>
+      <xs:element name="fetch">
+        <xs:complexType>
+          <xs:attribute name="source" use="required"/>
+          <xs:attribute name="mask" use="optional"/>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="store">
+        <xs:complexType>
+          <xs:attribute name="target" use="required"/>
+          <xs:attribute name="mask" use="optional"/>
+          <xs:attribute name="overwrite" type="enumOverwriteType" use="optional"/>
+        </xs:complexType>
+      </xs:element>
+      <xs:any/>
+    </xs:choice>
+  </xs:group>
+
+  <!-- Enumerations -->
+  <xs:simpleType name="enumOverwriteType">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="always"/>
+      <xs:enumeration value="if-newer"/>
+      <xs:enumeration value="never"/>
+    </xs:restriction>
+  </xs:simpleType>
+  
+</xs:schema>
