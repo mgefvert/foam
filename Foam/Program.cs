@@ -158,27 +158,35 @@ namespace Foam
 
         private static void RunJobs(JobConfiguration jobconfig, ExtensionLibrary library, List<string> jobs)
         {
-            foreach (var jobname in jobs)
+            var memory = jobconfig.CreateMemoryStorage();
+            try
             {
-                var jobdefinition = jobconfig.FindJob(jobname);
-                if (jobdefinition == null)
+                foreach (var jobname in jobs)
                 {
-                    Logger.Err($"Unable to find job '{jobname}' in job list");
-                    continue;
-                }
-
-                Logger.Enter("Starting job " + jobdefinition.Name, LogSeverity.Notice);
-                try
-                {
-                    using (var runner = new JobRunner(jobdefinition, library))
+                    var jobdefinition = jobconfig.FindJob(jobname);
+                    if (jobdefinition == null)
                     {
-                        runner.Execute();
+                        Logger.Err($"Unable to find job '{jobname}' in job list");
+                        continue;
+                    }
+
+                    Logger.Enter("Starting job " + jobdefinition.Name, LogSeverity.Notice);
+                    try
+                    {
+                        using (var runner = new JobRunner(jobdefinition, library, memory))
+                        {
+                            runner.Execute();
+                        }
+                    }
+                    finally
+                    {
+                        Logger.Leave("Job finished");
                     }
                 }
-                finally
-                {
-                    Logger.Leave("Job finished");
-                }
+            }
+            finally
+            {
+                memory.Dispose();
             }
         }
     }

@@ -7,6 +7,7 @@ using System.Xml.Linq;
 using DotNetCommons;
 using Foam.API.Commands;
 using Foam.API.Exceptions;
+using Foam.API.Memory;
 
 namespace Foam.API.Configuration
 {
@@ -15,6 +16,10 @@ namespace Foam.API.Configuration
         private const string Ns = "http://gefvert.org/xsd/foam";
         private readonly ExtensionLibrary _library;
         public List<JobDefinition> Jobs { get; } = new List<JobDefinition>();
+
+        private string _memoryType;
+        private string _memoryConnectionString;
+        private string _memoryFilename;
 
         public JobConfiguration(ExtensionLibrary library)
         {
@@ -35,6 +40,24 @@ namespace Foam.API.Configuration
 
             foreach (var xjob in xroot.Elements(XName.Get("jobs", Ns)).Elements(XName.Get("job", Ns)))
                 Jobs.AddIfNotNull(ParseJobNode(xjob));
+
+            ParseConfigNode(xroot.Element(XName.Get("config", Ns)));
+        }
+
+        private void ParseConfigNode(XElement config)
+        {
+            if (config == null)
+                throw ReadError(null, "config node is missing.");
+
+            var memory = config.Element(XName.Get("memory", Ns));
+            if (memory != null)
+            {
+                _memoryType = memory.Attribute("memory")?.Value;
+                _memoryConnectionString = memory.Attribute("memory")?.Value;
+                _memoryFilename = memory.Attribute("memory")?.Value;
+            }
+            else
+                throw ReadError(config, "memory node is missing.");
         }
 
         private Exception ReadError(XElement node, string message)
@@ -93,6 +116,20 @@ namespace Foam.API.Configuration
                 result.SetPropertyValue(property, new Uri(value));
             else
                 result.SetPropertyValue(property, value, CultureInfo.InvariantCulture);
+        }
+
+        public IMemory CreateMemoryStorage()
+        {
+            switch (_memoryType)
+            {
+                case "file":
+                    return new FileMemory(_memoryFilename);
+
+                case "mysql":
+                    return new MySqlMemory(_memoryConnectionString);
+            }
+
+            throw new FoamException($"Unrecognized memory backend type: '{_memoryType}', valid options are 'file' or 'mysql'.");
         }
     }
 }

@@ -1,5 +1,8 @@
 ﻿<?xml version="1.0"?>
 <foam xmlns="http://gefvert.org/xsd/foam">
+  <config>
+    <memory type="mysql" connectionString="Server=localhost; Database=foam; User=foam; Password=foam;"/>
+  </config>
   <providers>
     <provider/>
   </providers>

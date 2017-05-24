@@ -5,6 +5,7 @@ using DotNetCommons;
 using Foam.API.Configuration;
 using Foam.API.Exceptions;
 using Foam.API.Files;
+using Foam.API.Memory;
 using Foam.API.Providers;
 using Foam.API.Transactions;
 
@@ -19,11 +20,13 @@ namespace Foam.API
 
         public FileList FileBuffer => _fileBufferStack.Peek();
         public CommitBuffer CommitBuffer { get; } = new CommitBuffer();
+        public IMemory Memory { get; }
 
-        public JobRunner(JobDefinition definition, ExtensionLibrary library)
+        public JobRunner(JobDefinition definition, ExtensionLibrary library, IMemory memory)
         {
             _definition = definition;
             _library = library;
+            Memory = memory;
         }
 
         ~JobRunner()

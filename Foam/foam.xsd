@@ -9,12 +9,26 @@
   <xs:element name="foam">
     <xs:complexType>
       <xs:sequence>
+        <xs:element name="config" type="configType" minOccurs="1" maxOccurs="1"/>
         <xs:element name="providers" type="providersType" minOccurs="0" maxOccurs="1"/>
         <xs:element name="jobs" type="jobsType" minOccurs="0" maxOccurs="1"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
 
+  <!-- config node -->
+  <xs:complexType name="configType">
+    <xs:sequence>
+      <xs:element name="memory" minOccurs="1" maxOccurs="1">
+        <xs:complexType>
+          <xs:attribute name="type" use="required" type="enumMemoryType"/>
+          <xs:attribute name="connectionString" use="optional"/>
+          <xs:attribute name="filename" use="optional"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  
   <!-- providers node -->
   <xs:complexType name="providersType">
     <xs:sequence>
@@ -46,6 +60,9 @@
   <!-- command node -->
   <xs:group name="commandType">
     <xs:choice>
+      <xs:any/>
+    </xs:choice>
+    <!--
       <xs:element name="fetch">
         <xs:complexType>
           <xs:attribute name="source" use="required"/>
@@ -59,11 +76,11 @@
           <xs:attribute name="overwrite" type="enumOverwriteType" use="optional"/>
         </xs:complexType>
       </xs:element>
-      <xs:any/>
-    </xs:choice>
+    </xs:choice>-->
   </xs:group>
 
   <!-- Enumerations -->
+
   <xs:simpleType name="enumOverwriteType">
     <xs:restriction base="xs:token">
       <xs:enumeration value="always"/>
@@ -71,5 +88,12 @@
       <xs:enumeration value="never"/>
     </xs:restriction>
   </xs:simpleType>
-  
+
+  <xs:simpleType name="enumMemoryType">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="file"/>
+      <xs:enumeration value="mysql"/>
+    </xs:restriction>
+  </xs:simpleType>
+
 </xs:schema>
