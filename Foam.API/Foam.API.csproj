@@ -76,6 +76,9 @@
       <HintPath>..\packages\MySql.Data.6.9.9\lib\net45\MySql.Data.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="SevenZipSharp, Version=0.64.3890.29348, Culture=neutral, PublicKeyToken=20de82c62b055c88, processorArchitecture=MSIL">
+      <HintPath>..\packages\SevenZipSharp.0.64\lib\SevenZipSharp.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
@@ -93,9 +96,11 @@
     <Compile Include="Attributes\ShortDescriptionAttribute.cs" />
     <Compile Include="Commands\FailCommand.cs" />
     <Compile Include="Commands\ICommand.cs" />
+    <Compile Include="Commands\UnpackCommand.cs" />
     <Compile Include="Commands\PopCommand.cs" />
     <Compile Include="Commands\ResetCommand.cs" />
     <Compile Include="Commands\PushCommand.cs" />
+    <Compile Include="Commands\PackCommand.cs" />
     <Compile Include="Commands\StoreCommand.cs" />
     <Compile Include="Commands\FetchCommand.cs" />
     <Compile Include="Configuration\JobConfiguration.cs" />
@@ -103,6 +108,7 @@
     <Compile Include="Configuration\OverwriteMode.cs" />
     <Compile Include="Exceptions\FoamException.cs" />
     <Compile Include="Exceptions\FoamConfigurationException.cs" />
+    <Compile Include="Files\Compressor.cs" />
     <Compile Include="Files\FileItem.cs" />
     <Compile Include="Files\FileList.cs" />
     <Compile Include="ExtensionLibrary.cs" />
@@ -127,6 +133,14 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="7z32.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="7z64.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

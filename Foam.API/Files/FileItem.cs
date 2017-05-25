@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Text;
 using Foam.API.Exceptions;
 
 namespace Foam.API.Files
@@ -14,6 +15,7 @@ namespace Foam.API.Files
 
         public long Length => Data.Length;
         public Stream GetStream(bool writable) => writable ? Data.GetWriteableCopyStream() : Data.GetReadOnlyStream();
+        public string GetString(Encoding encoding) => Data.GetString(encoding);
 
         private FileInfo _temporary;
 
@@ -32,6 +34,10 @@ namespace Foam.API.Files
             CreationDate = fileinfo.CreationTime;
             ModifiedDate = fileinfo.LastWriteTime;
             Data = new ReadOnlyByteBuffer(File.ReadAllBytes(OriginalFullName));
+        }
+
+        public FileItem(string fullname, DateTimeOffset modifiedDate, byte[] data) : this(fullname, modifiedDate, modifiedDate, data)
+        {
         }
 
         public FileItem(string fullname, DateTimeOffset creationDate, DateTimeOffset modifiedDate, byte[] data)

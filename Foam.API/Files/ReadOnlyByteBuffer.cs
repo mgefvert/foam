@@ -52,5 +52,10 @@ namespace Foam.API.Files
             result.Position = 0;
             return result;
         }
+
+        public string GetString(Encoding encoding)
+        {
+            return encoding.GetString(_data);
+        }
     }
 }
