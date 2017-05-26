@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0"?>
 <foam xmlns="http://gefvert.org/xsd/foam">
   <config>
-    <memory type="mysql" connectionString="Server=localhost; Database=foam; User=foam; Password=foam;"/>
+    <memory type="mysql" connectionString="Server=localhost; Database=foam; User=foam; Password=foam;" filename=""/>
   </config>
   <providers>
     <provider/>
@@ -10,7 +10,8 @@
     <job name="test">
       <fetch source="d:\temp\foam-in" mask="*.jpg"/>
       <shrink-photo pixel-limit="65536"/>
-      <store target="d:\temp\foam-out" overwrite="if-newer"/>
+      <list/>
+      <write target="d:\temp\foam-out"/>
     </job>
   </jobs>
 </foam>

@@ -25,7 +25,7 @@ namespace Foam.API.Commands
 
             var files = provider.Fetch(Source, Mask, runner.CommitBuffer);
             foreach (var file in files)
-                Logger.Log($"Fetch: {file.ModifiedDate:s}  {file.Length,10:N0}  {file.Name}");
+                Logger.Log("Fetch: " + file);
 
             Logger.Log($"Fetch: {files.Count} files, {files.Sum(x => x.Length)} bytes");
 

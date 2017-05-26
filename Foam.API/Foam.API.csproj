@@ -83,6 +83,7 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -96,12 +97,13 @@
     <Compile Include="Attributes\ShortDescriptionAttribute.cs" />
     <Compile Include="Commands\FailCommand.cs" />
     <Compile Include="Commands\ICommand.cs" />
+    <Compile Include="Commands\ListCommand.cs" />
     <Compile Include="Commands\UnpackCommand.cs" />
     <Compile Include="Commands\PopCommand.cs" />
     <Compile Include="Commands\ResetCommand.cs" />
     <Compile Include="Commands\PushCommand.cs" />
     <Compile Include="Commands\PackCommand.cs" />
-    <Compile Include="Commands\StoreCommand.cs" />
+    <Compile Include="Commands\WriteCommand.cs" />
     <Compile Include="Commands\FetchCommand.cs" />
     <Compile Include="Configuration\JobConfiguration.cs" />
     <Compile Include="Configuration\JobDefinition.cs" />

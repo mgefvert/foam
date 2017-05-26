@@ -52,9 +52,9 @@ namespace Foam.API.Configuration
             var memory = config.Element(XName.Get("memory", Ns));
             if (memory != null)
             {
-                _memoryType = memory.Attribute("memory")?.Value;
-                _memoryConnectionString = memory.Attribute("memory")?.Value;
-                _memoryFilename = memory.Attribute("memory")?.Value;
+                _memoryType = memory.Attribute("type")?.Value;
+                _memoryConnectionString = memory.Attribute("connectionString")?.Value;
+                _memoryFilename = memory.Attribute("filename")?.Value;
             }
             else
                 throw ReadError(config, "memory node is missing.");

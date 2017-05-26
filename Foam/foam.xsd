@@ -52,32 +52,10 @@
   <!-- job node -->
   <xs:complexType name="jobType">
     <xs:sequence>
-      <xs:group ref="commandType" minOccurs="1" maxOccurs="unbounded"/>
+      <xs:any minOccurs="0" maxOccurs="unbounded" processContents="lax"/>
     </xs:sequence>
     <xs:attribute name="name" use="required" type="xs:string"></xs:attribute>
   </xs:complexType>
-
-  <!-- command node -->
-  <xs:group name="commandType">
-    <xs:choice>
-      <xs:any/>
-    </xs:choice>
-    <!--
-      <xs:element name="fetch">
-        <xs:complexType>
-          <xs:attribute name="source" use="required"/>
-          <xs:attribute name="mask" use="optional"/>
-        </xs:complexType>
-      </xs:element>
-      <xs:element name="store">
-        <xs:complexType>
-          <xs:attribute name="target" use="required"/>
-          <xs:attribute name="mask" use="optional"/>
-          <xs:attribute name="overwrite" type="enumOverwriteType" use="optional"/>
-        </xs:complexType>
-      </xs:element>
-    </xs:choice>-->
-  </xs:group>
 
   <!-- Enumerations -->
 

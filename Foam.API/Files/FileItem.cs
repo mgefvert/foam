@@ -9,13 +9,14 @@ namespace Foam.API.Files
     {
         public string Name { get; set; }
         public string OriginalFullName { get; set; }
-        public DateTimeOffset CreationDate { get; set; }
-        public DateTimeOffset ModifiedDate { get; set; }
+        public DateTimeOffset CreationTime { get; set; }
+        public DateTimeOffset ModifiedTime { get; set; }
         public ReadOnlyByteBuffer Data { get; private set; }
 
-        public long Length => Data.Length;
+        public int Length => Data.Length;
         public Stream GetStream(bool writable) => writable ? Data.GetWriteableCopyStream() : Data.GetReadOnlyStream();
         public string GetString(Encoding encoding) => Data.GetString(encoding);
+        public override string ToString() => $"{ModifiedTime:G}  {Length,10:N0}  {Name}";
 
         private FileInfo _temporary;
 
@@ -31,8 +32,8 @@ namespace Foam.API.Files
         {
             Name = fileinfo.Name;
             OriginalFullName = fileinfo.FullName;
-            CreationDate = fileinfo.CreationTime;
-            ModifiedDate = fileinfo.LastWriteTime;
+            CreationTime = fileinfo.CreationTime;
+            ModifiedTime = fileinfo.LastWriteTime;
             Data = new ReadOnlyByteBuffer(File.ReadAllBytes(OriginalFullName));
         }
 
@@ -40,12 +41,12 @@ namespace Foam.API.Files
         {
         }
 
-        public FileItem(string fullname, DateTimeOffset creationDate, DateTimeOffset modifiedDate, byte[] data)
+        public FileItem(string fullname, DateTimeOffset creationTime, DateTimeOffset modifiedTime, byte[] data)
         {
             Name = Path.GetFileName(fullname);
             OriginalFullName = fullname;
-            CreationDate = creationDate;
-            ModifiedDate = modifiedDate;
+            CreationTime = creationTime;
+            ModifiedTime = modifiedTime;
             Data = new ReadOnlyByteBuffer(data);
         }
 

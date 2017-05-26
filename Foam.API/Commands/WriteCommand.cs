@@ -6,8 +6,8 @@ using Foam.API.Configuration;
 namespace Foam.API.Commands
 {
     [ShortDescription("Writes files to a given location.")]
-    [LongDescription("The store command writes the files in the file buffer to a given location. ")]
-    public class StoreCommand : ICommand
+    [LongDescription("The write command writes the files in the file buffer to a given location. ")]
+    public class WriteCommand : ICommand
     {
         [PropertyDescription("Optional file mask specifies what files to write.")]
         public string Mask { get; set; }

@@ -22,11 +22,14 @@ namespace Foam.API
         public CommitBuffer CommitBuffer { get; } = new CommitBuffer();
         public IMemory Memory { get; }
 
+        public string JobName { get; }
+
         public JobRunner(JobDefinition definition, ExtensionLibrary library, IMemory memory)
         {
             _definition = definition;
             _library = library;
             Memory = memory;
+            JobName = definition.Name;
         }
 
         ~JobRunner()
