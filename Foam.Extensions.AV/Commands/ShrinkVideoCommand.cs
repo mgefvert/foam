@@ -44,10 +44,11 @@ namespace Foam.Extensions.AV.Commands
 
         private void ProcessFile(FileItem file)
         {
+            var extension = Path.GetExtension(file.Name);
             var temporary = file.CreateTemporaryCopy();
             try
             {
-                var newfile = new FileInfo(Path.GetTempFileName());
+                var newfile = new FileInfo(Path.GetTempFileName() + extension);
                 ShrinkVideo(temporary, newfile);
                 file.LoadFromFile(newfile.FullName);
 

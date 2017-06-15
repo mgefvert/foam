@@ -23,8 +23,7 @@ namespace Foam.API.Commands
         {
             public string Filename { get; set; }
             public int Length { get; set; }
-            public DateTimeOffset CreationTime { get; set; }
-            public DateTimeOffset ModificationTime { get; set; }
+            public DateTimeOffset Timestamp { get; set; }
         }
 
         public class JsonPost
@@ -86,8 +85,7 @@ namespace Foam.API.Commands
                 {
                     Filename = file.Name,
                     Length = file.Length,
-                    CreationTime = file.CreationTime,
-                    ModificationTime = file.ModifiedTime
+                    Timestamp = file.Timestamp
                 });
 
             var serializer = new DataContractJsonSerializer(typeof(JsonPost));

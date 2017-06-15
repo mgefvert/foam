@@ -286,3 +286,5 @@ __pycache__/
 *.btm.cs
 *.odx.cs
 *.xsd.cs
+/Foam.Extensions.AV.Test/local-ARWEN.xml
+Foam.Extensions.AWS.Test/local-ARWEN.xml

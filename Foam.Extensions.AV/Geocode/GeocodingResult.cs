@@ -3,15 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 using DotNetCommons;
+using Newtonsoft.Json;
 
 namespace Foam.Extensions.AV.Geocode
 {
-    [Serializable]
     public class GeocodingResult
     {
-        public bool Success => ResultCode == "OK";
         public string ResultCode { get; set; }
-
         public string StreetNumber { get; set; }
         public string Street { get; set; }
         public string City { get; set; }
@@ -20,23 +18,28 @@ namespace Foam.Extensions.AV.Geocode
         public string Country { get; set; }
         public string Zip { get; set; }
 
-        public string Reference
+        [JsonIgnore]
+        public bool Success => ResultCode == "OK";
+        [JsonIgnore]
+        public string Reference => string.Join(", ", new List<string>
         {
-            get
-            {
-                var data = new List<string>
-                {
-                    Street,
-                    City + " " + State,
-                    Country
-                };
-
-                return string.Join(", ", data.TrimAndFilter());
-            }
-        }
+            Street,
+            City + " " + State,
+            Country
+        }.TrimAndFilter());
 
         public GeocodingResult()
         {
+        }
+
+        public static GeocodingResult FromJson(string source)
+        {
+            return JsonConvert.DeserializeObject<GeocodingResult>(source);
+        }
+
+        public string ToJson()
+        {
+            return JsonConvert.SerializeObject(this);
         }
 
         public GeocodingResult(XContainer document)

@@ -76,7 +76,7 @@ namespace Foam.API.Files
             using (var target = new MemoryStream())
             {
                 compressor.CompressStreamDictionary(streams, target);
-                return new FileItem(compressedName, DateTimeOffset.Now, DateTimeOffset.Now, target.ToArray());
+                return new FileItem(compressedName, DateTimeOffset.Now, target.ToArray());
             }
         }
 

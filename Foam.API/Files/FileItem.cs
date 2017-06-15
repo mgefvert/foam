@@ -9,14 +9,15 @@ namespace Foam.API.Files
     {
         public string Name { get; set; }
         public string OriginalFullName { get; set; }
-        public DateTimeOffset CreationTime { get; set; }
-        public DateTimeOffset ModifiedTime { get; set; }
+        public DateTimeOffset Timestamp { get; set; }
         public ReadOnlyByteBuffer Data { get; private set; }
 
+        public int Crc32 => Data.CalcCrc32();
         public int Length => Data.Length;
+
         public Stream GetStream(bool writable) => writable ? Data.GetWriteableCopyStream() : Data.GetReadOnlyStream();
         public string GetString(Encoding encoding) => Data.GetString(encoding);
-        public override string ToString() => $"{ModifiedTime:G}  {Length,10:N0}  {Name}";
+        public override string ToString() => $"{Timestamp:G}  {Length,10:N0}  {Name}";
 
         private FileInfo _temporary;
 
@@ -32,21 +33,23 @@ namespace Foam.API.Files
         {
             Name = fileinfo.Name;
             OriginalFullName = fileinfo.FullName;
-            CreationTime = fileinfo.CreationTime;
-            ModifiedTime = fileinfo.LastWriteTime;
+            Timestamp = fileinfo.LastWriteTime;
             Data = new ReadOnlyByteBuffer(File.ReadAllBytes(OriginalFullName));
         }
 
-        public FileItem(string fullname, DateTimeOffset modifiedDate, byte[] data) : this(fullname, modifiedDate, modifiedDate, data)
-        {
-        }
-
-        public FileItem(string fullname, DateTimeOffset creationTime, DateTimeOffset modifiedTime, byte[] data)
+        public FileItem(string fullname, DateTimeOffset timestamp, Stream stream)
         {
             Name = Path.GetFileName(fullname);
             OriginalFullName = fullname;
-            CreationTime = creationTime;
-            ModifiedTime = modifiedTime;
+            Timestamp = timestamp;
+            Data = new ReadOnlyByteBuffer(stream);
+        }
+
+        public FileItem(string fullname, DateTimeOffset timestamp, byte[] data)
+        {
+            Name = Path.GetFileName(fullname);
+            OriginalFullName = fullname;
+            Timestamp = timestamp;
             Data = new ReadOnlyByteBuffer(data);
         }
 

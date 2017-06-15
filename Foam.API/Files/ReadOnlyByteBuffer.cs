@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Text;
+using DotNetCommons;
 
 namespace Foam.API.Files
 {
@@ -56,6 +57,11 @@ namespace Foam.API.Files
         public string GetString(Encoding encoding)
         {
             return encoding.GetString(_data);
+        }
+
+        public int CalcCrc32()
+        {
+            return (int) Crc32.ComputeChecksum(_data);
         }
     }
 }

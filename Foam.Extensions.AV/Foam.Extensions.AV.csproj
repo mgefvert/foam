@@ -69,6 +69,9 @@
     <Reference Include="ExifLib, Version=1.7.0.0, Culture=neutral, PublicKeyToken=30284005913968db, processorArchitecture=MSIL">
       <HintPath>..\packages\ExifLib.1.7.0.0\lib\net45\ExifLib.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -84,7 +87,7 @@
     <Compile Include="Commands\GeocodePhotoCommand.cs" />
     <Compile Include="Commands\ShrinkVideoCommand.cs" />
     <Compile Include="Commands\ShrinkPhotoCommand.cs" />
-    <Compile Include="ExifImage.cs" />
+    <Compile Include="Classes\ExifImage.cs" />
     <Compile Include="Geocode\GeocodingApi.cs" />
     <Compile Include="Geocode\GeocodingResult.cs" />
     <Compile Include="Geocode\LatLong.cs" />

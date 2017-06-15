@@ -1,9 +1,14 @@
 ﻿using System;
+using System.IO;
+using System.Linq;
 using DotNetCommons;
 using Foam.API;
 using Foam.API.Attributes;
 using Foam.API.Commands;
 using Foam.API.Files;
+using Foam.API.Memory;
+using Foam.Extensions.AV.Classes;
+using Foam.Extensions.AV.Geocode;
 
 namespace Foam.Extensions.AV.Commands
 {
@@ -25,12 +30,39 @@ namespace Foam.Extensions.AV.Commands
         public void Execute(JobRunner runner)
         {
             foreach(var file in runner.FileBuffer.SelectFiles(Mask))
-                Logger.Catch(() => ProcessFile(file));
+                Logger.Catch(() => ProcessFile(file, runner.Memory));
         }
 
-        private void ProcessFile(FileItem file)
+        private void ProcessFile(FileItem file, IMemory memory)
         {
-            throw new NotImplementedException();
+            var exif = new ExifImage(file);
+            if (!exif.LatLong.HasValue)
+                return;
+
+            var geoinfo = GeoLookup(exif.LatLong, memory);
+            if (!geoinfo.Success)
+                return;
+
+            var name = Path.GetFileNameWithoutExtension(file.Name)?.Split('(').First().Trim();
+            if (string.IsNullOrEmpty(name))
+                return;
+
+            var ext = Path.GetExtension(file.Name);
+            name += " (" + geoinfo.Reference + ")";
+
+            file.Name = name + ext;
+        }
+
+        private GeocodingResult GeoLookup(LatLong latlong, IMemory memory)
+        {
+            if (memory.Exists("geocode", latlong.PositionString))
+                return GeocodingResult.FromJson(memory.Get("geocode", latlong.PositionString));
+
+            var result = GeocodingApi.ReverseGeocodeLookup(ApiKey, latlong);
+            if (result.ResultCode != "REQUEST_DENIED")
+                memory.Set("geocode", latlong.PositionString, result.ToJson());
+
+            return result;
         }
     }
 }

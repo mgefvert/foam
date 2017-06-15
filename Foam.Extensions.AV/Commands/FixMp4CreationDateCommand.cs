@@ -75,7 +75,7 @@ namespace Foam.Extensions.AV.Commands
                     // Make a copy of the file
                     stream = file.GetStream(true);
                     stream.Position = foundPosition;
-                    WriteTime(stream, version, file.CreationTime.UtcDateTime);
+                    WriteTime(stream, version, file.Timestamp.UtcDateTime);
 
                     stream.Position = stream.Position - 4;
                     Logger.Log(file.Name + " time changed to " + ReadTime(stream, version));

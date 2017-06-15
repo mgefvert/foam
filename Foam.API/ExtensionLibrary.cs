@@ -53,8 +53,11 @@ namespace Foam.API
             }
         }
 
-        protected void ScanAssembly(Assembly assembly)
+        public void ScanAssembly(Assembly assembly)
         {
+            if (LoadedAssemblies.Any(x => x.Assembly == assembly))
+                return;
+
             var library = new ExtensionAssembly { Assembly = assembly };
             var types = assembly.GetTypes();
 

@@ -1,52 +1,41 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Threading;
+using System.Xml.Linq;
 
 namespace Foam.Extensions.AV.Geocode
 {
     public class GeocodingApi
     {
-        /*private readonly string _key = ConfigurationManager.AppSettings["Google-Geocoding-API"];
-        private DateTime _rateLimiter = DateTime.MinValue;
-        private static readonly MicroDataStore Cache = new MicroDataStore("geolookup.dat");
+        private static DateTime _rateLimiter = DateTime.MinValue;
 
-        public void SaveCache()
-        {
-            Cache.Save();
-        }
-
-        private XDocument Request(IDictionary<string, string> parameters)
+        public static GeocodingResult ReverseGeocodeLookup(string apikey, LatLong latlong)
         {
             while ((DateTime.Now - _rateLimiter).TotalMilliseconds < 250)
                 Thread.Sleep(10);
 
             _rateLimiter = DateTime.Now;
 
-            var uri = new UriBuilder("https://maps.googleapis.com/maps/api/geocode/xml")
+            var parameters = new Dictionary<string, string>
             {
-                Query = string.Join("&", parameters.Select(x => x.Key + "=" + Uri.EscapeDataString(x.Value)))
+                { "latlng", latlong.PositionString },
+                { "key", apikey },
+                { "result_type", "street_address" }
             };
 
-            var request = WebRequest.CreateHttp(uri.Uri);
+            var uri = "https://maps.googleapis.com/maps/api/geocode/xml?" + 
+                string.Join("&", parameters.Select(x => x.Key + "=" + Uri.EscapeDataString(x.Value)));
+
+            var request = WebRequest.CreateHttp(uri);
+
             using (var response = request.GetResponse())
             using (var stream = response.GetResponseStream())
-                return XDocument.Load(stream);
-        }
-
-        public GeocodingResult ReverseGeocodeLookup(LatLong latlong)
-        {
-            var position = latlong.PositionString;
-
-            if (Cache.Exists(position))
-                return (GeocodingResult)Cache.AsObject[position];
-
-            var result = new GeocodingResult(Request(new Dictionary<string, string>
             {
-                { "latlng", position },
-                { "key", _key },
-                { "result_type", "street_address" }
-            }));
-
-            Cache.AsObject[position] = result;
-            return result;
-        }*/
+                var result = XDocument.Load(stream);
+                return new GeocodingResult(result);
+            }
+        }
     }
 }

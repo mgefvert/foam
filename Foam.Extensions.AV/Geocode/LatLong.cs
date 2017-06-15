@@ -5,21 +5,17 @@ namespace Foam.Extensions.AV.Geocode
 {
     public class LatLong
     {
-        private readonly double _latitude;
-        private readonly double _longitude;
-        private readonly bool _hasValue;
+        public bool HasValue { get; }
+        public double Latitude { get; }
+        public double Longitude { get; }
 
-        public bool HasValue => _hasValue;
-        public double Latitude => _latitude;
-        public double Longitude => _longitude;
-
-        public string PositionString => _hasValue
-          ? _latitude.ToString(CultureInfo.InvariantCulture) + "," + _longitude.ToString(CultureInfo.InvariantCulture)
+        public string PositionString => HasValue
+          ? Latitude.ToString(CultureInfo.InvariantCulture) + "," + Longitude.ToString(CultureInfo.InvariantCulture)
           : null;
 
         public LatLong()
         {
-            _hasValue = false;
+            HasValue = false;
         }
 
         public LatLong(string latitudeReference, double[] latitude, string longitudeReference, double[] longitude)
@@ -29,12 +25,12 @@ namespace Foam.Extensions.AV.Geocode
 
         public LatLong(double? latitude, double? longitude)
         {
-            _hasValue = latitude.HasValue && longitude.HasValue;
-            if (!_hasValue)
+            HasValue = latitude.HasValue && longitude.HasValue;
+            if (!HasValue)
                 return;
 
-            _latitude = latitude.GetValueOrDefault();
-            _longitude = longitude.GetValueOrDefault();
+            Latitude = latitude.GetValueOrDefault();
+            Longitude = longitude.GetValueOrDefault();
         }
 
         public static double? DmsToDecimal(string reference, double[] position)

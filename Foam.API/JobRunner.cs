@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using DotNetCommons;
 using Foam.API.Configuration;
 using Foam.API.Exceptions;
@@ -21,8 +22,18 @@ namespace Foam.API
         public FileList FileBuffer => _fileBufferStack.Peek();
         public CommitBuffer CommitBuffer { get; } = new CommitBuffer();
         public IMemory Memory { get; }
-
         public string JobName { get; }
+
+        public static JobRunner CreateDebugRunner()
+        {
+            var definition = new JobDefinition { Name = "debug" };
+
+            var library = new ExtensionLibrary();
+            foreach(var assembly in AppDomain.CurrentDomain.GetAssemblies())
+                library.ScanAssembly(assembly);
+
+            return new JobRunner(definition, library, new InternalMemory());
+        }
 
         public JobRunner(JobDefinition definition, ExtensionLibrary library, IMemory memory)
         {
@@ -30,6 +41,8 @@ namespace Foam.API
             _library = library;
             Memory = memory;
             JobName = definition.Name;
+
+            ReinitFileBuffer();
         }
 
         ~JobRunner()
@@ -51,8 +64,7 @@ namespace Foam.API
             StartProviders();
             try
             {
-                // Seed the initial file buffer stack
-                _fileBufferStack.Push(new FileList());
+                ReinitFileBuffer();
 
                 foreach (var cmd in _definition.Commands)
                 {
@@ -80,7 +92,15 @@ namespace Foam.API
             finally
             {
                 ShutdownProviders();
+                ReinitFileBuffer();
             }
+        }
+
+        private void ReinitFileBuffer()
+        {
+            // Seed the initial file buffer stack
+            _fileBufferStack.Clear();
+            _fileBufferStack.Push(new FileList());
         }
 
         public IProvider SelectProvider(Uri source)

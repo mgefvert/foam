@@ -116,6 +116,7 @@
     <Compile Include="ExtensionLibrary.cs" />
     <Compile Include="Files\ReadOnlyByteBuffer.cs" />
     <Compile Include="JobRunner.cs" />
+    <Compile Include="Memory\InternalMemory.cs" />
     <Compile Include="Memory\FileMemory.cs" />
     <Compile Include="Memory\MySqlMemory.cs" />
     <Compile Include="Memory\IMemory.cs" />
