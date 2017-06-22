@@ -88,6 +88,14 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\FailTest.cs" />
+    <Compile Include="Commands\FetchTest.cs" />
+    <Compile Include="Commands\ListTest.cs" />
+    <Compile Include="Commands\PackTest.cs" />
+    <Compile Include="Commands\PushPopTest.cs" />
+    <Compile Include="Commands\ResetTest.cs" />
+    <Compile Include="Commands\UnpackTest.cs" />
+    <Compile Include="Commands\WriteTest.cs" />
     <Compile Include="Files\CompressorTest.cs" />
     <Compile Include="Memory\MySqlMemoryTest.cs" />
     <Compile Include="Memory\FileMemoryTest.cs" />

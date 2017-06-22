@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using DotNetCommons;
 using Foam.API.Configuration;
 using Foam.API.Exceptions;
@@ -29,7 +28,11 @@ namespace Foam.API
             var definition = new JobDefinition { Name = "debug" };
 
             var library = new ExtensionLibrary();
-            foreach(var assembly in AppDomain.CurrentDomain.GetAssemblies())
+            var assemblies = AppDomain.CurrentDomain.GetAssemblies()
+                .Where(x => !x.FullName.StartsWith("System"))
+                .ToList();
+
+            foreach (var assembly in assemblies)
                 library.ScanAssembly(assembly);
 
             return new JobRunner(definition, library, new InternalMemory());
@@ -42,6 +45,7 @@ namespace Foam.API
             Memory = memory;
             JobName = definition.Name;
 
+            StartProviders();
             ReinitFileBuffer();
         }
 
@@ -61,7 +65,6 @@ namespace Foam.API
             foreach (var cmd in _definition.Commands)
                 cmd.Initialize();
 
-            StartProviders();
             try
             {
                 ReinitFileBuffer();
@@ -91,7 +94,6 @@ namespace Foam.API
             }
             finally
             {
-                ShutdownProviders();
                 ReinitFileBuffer();
             }
         }

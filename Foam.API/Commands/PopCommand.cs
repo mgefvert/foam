@@ -14,7 +14,7 @@ namespace Foam.API.Commands
 
         public void Execute(JobRunner runner)
         {
-            runner.PushFileBuffer();
+            runner.PopFileBuffer();
         }
     }
 }

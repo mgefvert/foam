@@ -34,7 +34,7 @@ namespace Foam.API.Files
         public FileList ExtractFiles(string mask)
         {
             var result = SelectFiles(mask).ToList();
-            foreach (var file in SelectFiles(mask))
+            foreach (var file in result)
                 Remove(file);
 
             return new FileList(result);

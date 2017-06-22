@@ -53,6 +53,11 @@ namespace Foam.API.Files
             Data = new ReadOnlyByteBuffer(data);
         }
 
+        public FileItem(string fullname, DateTimeOffset timestamp, string data, Encoding encoding = null)
+            : this(fullname, timestamp, (encoding ?? Encoding.UTF8).GetBytes(data))
+        {
+        }
+
         ~FileItem()
         {
             Dispose();

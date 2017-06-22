@@ -61,7 +61,7 @@ namespace Foam.API
             var library = new ExtensionAssembly { Assembly = assembly };
             var types = assembly.GetTypes();
 
-            // Find all ICommand types
+            // Find all ICommand and IProvider types
             foreach (var type in types)
             {
                 var interfaces = type.GetInterfaces();
