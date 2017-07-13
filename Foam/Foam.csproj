@@ -109,5 +109,11 @@
       <Name>Foam.Extensions.AV</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="foam.arwen.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

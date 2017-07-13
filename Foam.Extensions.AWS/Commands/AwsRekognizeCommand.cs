@@ -4,7 +4,6 @@ using System.Linq;
 using Amazon;
 using DotNetCommons;
 using DotNetCommons.WinForms.Graphics;
-using ExifLib;
 using Foam.API;
 using Foam.API.Attributes;
 using Foam.API.Commands;

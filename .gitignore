@@ -288,3 +288,4 @@ __pycache__/
 *.xsd.cs
 /Foam.Extensions.AV.Test/local-ARWEN.xml
 Foam.Extensions.AWS.Test/local-ARWEN.xml
+Foam/foam.arwen.xml
