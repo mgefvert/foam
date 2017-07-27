@@ -27,7 +27,7 @@ namespace Foam.API.Commands
 
         public void Execute(JobRunner runner)
         {
-            var files = runner.FileBuffer.SelectFiles(Mask).ToList();
+            var files = runner.FileBuffer.SelectFiles(Evaluator.Text(Mask)).ToList();
 
             if (Format == CompressionMode.GZip)
             {
@@ -37,14 +37,14 @@ namespace Foam.API.Commands
 
                 foreach (var file in files)
                 {
-                    var archive = Compressor.Compress(new List<FileItem> { file }, Name, Format);
+                    var archive = Compressor.Compress(new List<FileItem> { file }, Evaluator.Text(Name, file), Format);
                     runner.FileBuffer.Remove(file);
                     runner.FileBuffer.AddIfNotNull(archive);
                 }
             }
             else
             {
-                var archive = Compressor.Compress(files, Name, Format);
+                var archive = Compressor.Compress(files, Evaluator.Text(Name), Format);
                 foreach(var file in files)
                     runner.FileBuffer.Remove(file);
                 runner.FileBuffer.AddIfNotNull(archive);

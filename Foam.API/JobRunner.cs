@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using DotNetCommons;
+using Foam.API.Commands;
 using Foam.API.Configuration;
 using Foam.API.Exceptions;
 using Foam.API.Files;
@@ -18,10 +19,11 @@ namespace Foam.API
         private readonly List<IProvider> _providers = new List<IProvider>();
         private readonly Stack<FileList> _fileBufferStack = new Stack<FileList>();
 
-        public FileList FileBuffer => _fileBufferStack.Peek();
-        public CommitBuffer CommitBuffer { get; } = new CommitBuffer();
-        public IMemory Memory { get; }
         public string JobName { get; }
+        public CommitBuffer CommitBuffer { get; } = new CommitBuffer();
+        public FileList FileBuffer => _fileBufferStack.Peek();
+        public Dictionary<string, Map> Maps { get; }
+        public IMemory Memory { get; }
 
         public static JobRunner CreateDebugRunner()
         {
@@ -35,15 +37,23 @@ namespace Foam.API
             foreach (var assembly in assemblies)
                 library.ScanAssembly(assembly);
 
-            return new JobRunner(definition, library, new InternalMemory());
+            return new JobRunner(new JobRunnerSettings {
+                Definition = definition,
+                Library = library,
+                Memory = new InternalMemory()
+            });
         }
 
-        public JobRunner(JobDefinition definition, ExtensionLibrary library, IMemory memory)
+        public JobRunner(JobRunnerSettings settings)
         {
-            _definition = definition;
-            _library = library;
-            Memory = memory;
-            JobName = definition.Name;
+            _definition = settings.Definition;
+            _library = settings.Library;
+
+            Maps = settings.Maps?.ToDictionary(x => x.Name, StringComparer.CurrentCultureIgnoreCase)
+                   ?? new Dictionary<string, Map>();
+
+            Memory = settings.Memory;
+            JobName = _definition.Name;
 
             StartProviders();
             ReinitFileBuffer();
@@ -68,22 +78,14 @@ namespace Foam.API
             try
             {
                 ReinitFileBuffer();
-
-                foreach (var cmd in _definition.Commands)
+                try
                 {
-                    var cmdName = ExtensionLibrary.TypeToName(cmd.GetType());
-
-                    Logger.Enter("Executing command: " + cmdName);
-                    try
-                    {
-                        cmd.Execute(this);
-                    }
-                    finally
-                    {
-                        Logger.Leave();
-                    }
+                    ExecuteCommands(_definition.Commands);
                 }
-
+                catch (FoamStopJobException)
+                {
+                    Logger.Log("Job ended through Stop command.");
+                }
                 CommitBuffer.Commit();
             }
             catch (Exception ex)
@@ -95,6 +97,35 @@ namespace Foam.API
             finally
             {
                 ReinitFileBuffer();
+            }
+        }
+
+        private void ExecuteCommands(IEnumerable<ICommand> commands)
+        {
+            foreach (var cmd in commands)
+            {
+                var cmdName = ExtensionLibrary.TypeToName(cmd.GetType());
+
+                Logger.Enter("Executing command: " + cmdName);
+                try
+                {
+                    cmd.Execute(this);
+
+                    if (cmd is ICompoundCommand compound)
+                    {
+                        var filelist = compound.Filter(FileBuffer);
+                        if (filelist == null || filelist.Count == 0)
+                            continue;
+
+                        PushFileBuffer(filelist);
+                        ExecuteCommands(compound.Commands);
+                        PopFileBuffer();
+                    }
+                }
+                finally
+                {
+                    Logger.Leave();
+                }
             }
         }
 
@@ -136,7 +167,11 @@ namespace Foam.API
 
         public void PushFileBuffer()
         {
-            var newlist = new FileList(FileBuffer);
+            PushFileBuffer(new FileList(FileBuffer));
+        }
+
+        public void PushFileBuffer(FileList newlist)
+        {
             _fileBufferStack.Push(newlist);
         }
 

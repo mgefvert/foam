@@ -84,6 +84,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\FixMp4CreationDateCommand.cs" />
+    <Compile Include="Commands\ReadExifCommand.cs" />
     <Compile Include="Commands\GeocodePhotoCommand.cs" />
     <Compile Include="Commands\ShrinkVideoCommand.cs" />
     <Compile Include="Commands\ShrinkPhotoCommand.cs" />

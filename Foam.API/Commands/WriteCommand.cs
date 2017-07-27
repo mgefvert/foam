@@ -2,6 +2,7 @@
 using System.Linq;
 using Foam.API.Attributes;
 using Foam.API.Configuration;
+using Foam.API.Files;
 
 namespace Foam.API.Commands
 {
@@ -12,7 +13,7 @@ namespace Foam.API.Commands
         [PropertyDescription("Optional file mask specifies what files to write.")]
         public string Mask { get; set; }
         [PropertyDescription("Target location to write to.")]
-        public Uri Target { get; set; }
+        public string Target { get; set; }
         [PropertyDescription("Whether to overwrite files: always (default), if-newer, or never.")]
         public OverwriteMode Overwrite { get; set; }
 
@@ -22,10 +23,12 @@ namespace Foam.API.Commands
 
         public void Execute(JobRunner runner)
         {
-            var provider = runner.SelectProvider(Target);
-            var files = runner.FileBuffer.SelectFiles(Mask).ToList();
+            var target = new Uri(Evaluator.Text(Target));
 
-            provider.Write(Target, files, runner.CommitBuffer, Overwrite);
+            var provider = runner.SelectProvider(target);
+            var files = runner.FileBuffer.SelectFiles(Evaluator.Text(Mask)).ToList();
+
+            provider.Write(target, files, runner.CommitBuffer, Overwrite);
         }
     }
 }

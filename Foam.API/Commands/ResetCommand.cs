@@ -1,6 +1,7 @@
 ﻿using System;
 using DotNetCommons;
 using Foam.API.Attributes;
+using Foam.API.Files;
 
 namespace Foam.API.Commands
 {
@@ -17,7 +18,7 @@ namespace Foam.API.Commands
 
         public void Execute(JobRunner runner)
         {
-            var files = runner.FileBuffer.ExtractFiles(Mask);
+            var files = runner.FileBuffer.ExtractFiles(Evaluator.Text(Mask));
 
             Logger.Log($"Removed {files.Count} files from the file buffer");
         }

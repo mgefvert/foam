@@ -38,7 +38,7 @@ namespace Foam.API.Commands
         [PropertyDescription("Optional file mask specifies what files to compress.")]
         public string Mask { get; set; }
         [PropertyDescription("URL to post to, if an HTTP transaction is desired.")]
-        public Uri Url { get; set; }
+        public string Url { get; set; }
         [PropertyDescription("From email address, if an email is desired. If left blank, the default app.settings email is used.")]
         public string FromEmail { get; set; }
         [PropertyDescription("Destination email address, if an email is desired.")]
@@ -50,7 +50,7 @@ namespace Foam.API.Commands
 
         public void Execute(JobRunner runner)
         {
-            var files = runner.FileBuffer.SelectFiles(Mask).ToList();
+            var files = runner.FileBuffer.SelectFiles(Evaluator.Text(Mask)).ToList();
 
             if (!files.Any())
             {
@@ -65,7 +65,7 @@ namespace Foam.API.Commands
             }
 
             if (Url != null)
-                ListToHttp(files, runner.JobName, Url);
+                ListToHttp(files, runner.JobName, new Uri(Evaluator.Text(Url)));
 
             if (!string.IsNullOrEmpty(ToEmail))
                 ListToEmail(files, runner.JobName, ToEmail, FromEmail ?? ConfigurationManager.AppSettings["default-email"]);

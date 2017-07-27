@@ -173,7 +173,15 @@ namespace Foam
                     Logger.Enter("Starting job " + jobdefinition.Name, LogSeverity.Notice);
                     try
                     {
-                        using (var runner = new JobRunner(jobdefinition, library, memory))
+                        var settings = new JobRunnerSettings
+                        {
+                            Definition = jobdefinition,
+                            Library = library,
+                            Memory = memory,
+                            Maps = jobconfig.Maps
+                        };
+
+                        using (var runner = new JobRunner(settings))
                         {
                             runner.Execute();
                         }

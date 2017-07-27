@@ -29,7 +29,7 @@ namespace Foam.API.Test.Commands
 
                 var cmd = new WriteCommand
                 {
-                    Target = new Uri(Path.GetTempPath()),
+                    Target = Path.GetTempPath(),
                     Mask = "*.txt"
                 };
 

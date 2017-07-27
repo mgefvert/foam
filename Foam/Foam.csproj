@@ -108,6 +108,10 @@
       <Project>{f0117e8f-3b85-42f7-a2d1-bcee5bcd03e8}</Project>
       <Name>Foam.Extensions.AV</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Foam.Extensions.AWS\Foam.Extensions.AWS.csproj">
+      <Project>{7b8c83b0-97a0-45d4-b072-7a2ae8ab4847}</Project>
+      <Name>Foam.Extensions.AWS</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="foam.arwen.xml">

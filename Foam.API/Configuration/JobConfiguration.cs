@@ -16,6 +16,7 @@ namespace Foam.API.Configuration
         private const string Ns = "http://gefvert.org/xsd/foam";
         private readonly ExtensionLibrary _library;
         public List<JobDefinition> Jobs { get; } = new List<JobDefinition>();
+        public List<Map> Maps { get; } = new List<Map>();
 
         private string _memoryType;
         private string _memoryConnectionString;
@@ -38,10 +39,24 @@ namespace Foam.API.Configuration
             if (xroot == null)
                 throw ReadError(null, "Root node missing");
 
+            foreach(var xmap in xroot.Elements(XName.Get("maps", Ns)).Elements(XName.Get("map", Ns)))
+                Maps.AddIfNotNull(ParseMapNode(xmap));
+
             foreach (var xjob in xroot.Elements(XName.Get("jobs", Ns)).Elements(XName.Get("job", Ns)))
                 Jobs.AddIfNotNull(ParseJobNode(xjob));
 
             ParseConfigNode(xroot.Element(XName.Get("config", Ns)));
+        }
+
+        private Exception ReadError(XElement node, string message)
+        {
+            message += " in element " + (node?.Name ?? "<null>");
+
+            var lineInfo = node as IXmlLineInfo;
+            if (lineInfo?.HasLineInfo() ?? false)
+                message += " on line " + lineInfo.LineNumber;
+
+            return new FoamConfigurationException(message);
         }
 
         private void ParseConfigNode(XElement config)
@@ -60,15 +75,25 @@ namespace Foam.API.Configuration
                 throw ReadError(config, "memory node is missing.");
         }
 
-        private Exception ReadError(XElement node, string message)
+        private Map ParseMapNode(XElement xmap)
         {
-            message += " in element " + (node?.Name ?? "<null>");
+            var result = new Map
+            {
+                Name = xmap.Attribute("name")?.Value
+            };
 
-            var lineInfo = node as IXmlLineInfo;
-            if (lineInfo?.HasLineInfo() ?? false)
-                message += " on line " + lineInfo.LineNumber;
+            if (string.IsNullOrEmpty(result.Name))
+                throw ReadError(xmap, "Map name is missing");
 
-            return new FoamConfigurationException(message);
+            foreach (var xadd in xmap.Elements(XName.Get("add", Ns)))
+            {
+                var key = xadd.Attribute("key")?.Value ?? "";
+                var value = xadd.Attribute("value")?.Value ?? "";
+
+                result.Add(key, value);
+            }
+
+            return result;
         }
 
         private JobDefinition ParseJobNode(XElement xjob)
@@ -102,20 +127,45 @@ namespace Foam.API.Configuration
             foreach (var xattr in xcommand.Attributes())
                 SetProperty(xcommand, result, xattr.Name.LocalName, xattr.Value);
 
+            if (xcommand.HasElements && result is ICompoundCommand compound)
+            {
+                foreach (var xsub in xcommand.Elements())
+                    compound.Commands.AddIfNotNull(ParseCommandNode(xsub));
+            }
+
             return result;
         }
 
         private void SetProperty(XElement node, ICommand result, string name, string value)
         {
+            string Multiply(string numvalue, double multiplier)
+            {
+                var number = double.Parse(numvalue.Substring(0, value.Length - 1), CultureInfo.InvariantCulture);
+                return (number * multiplier).ToString(CultureInfo.InvariantCulture);
+            }
+
             var pname = name.Replace("-", "");
             var property = result.GetType().GetProperties().FirstOrDefault(p => p.Name.Like(pname));
             if (property == null)
                 throw ReadError(node, $"Undefined attribute '{name}'");
 
             if (property.PropertyType == typeof(Uri))
+            {
                 result.SetPropertyValue(property, new Uri(value));
-            else
-                result.SetPropertyValue(property, value, CultureInfo.InvariantCulture);
+                return;
+            }
+
+            if (property.PropertyType.IsNumeric())
+            {
+                if (value.EndsWith("G"))
+                    value = Multiply(value, 1024 * 1024 * 1024);
+                else if (value.EndsWith("M"))
+                    value = Multiply(value, 1024 * 1024);
+                else if (value.EndsWith("k"))
+                    value = Multiply(value, 1024);
+            }
+
+            result.SetPropertyValue(property, value, CultureInfo.InvariantCulture);
         }
 
         public IMemory CreateMemoryStorage()

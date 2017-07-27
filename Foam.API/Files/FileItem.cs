@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using Foam.API.Exceptions;
@@ -18,6 +19,8 @@ namespace Foam.API.Files
         public Stream GetStream(bool writable) => writable ? Data.GetWriteableCopyStream() : Data.GetReadOnlyStream();
         public string GetString(Encoding encoding) => Data.GetString(encoding);
         public override string ToString() => $"{Timestamp:G}  {Length,10:N0}  {Name}";
+
+        public Dictionary<string, string> Variables { get; } = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
 
         private FileInfo _temporary;
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using Foam.API.Attributes;
 using Foam.API.Exceptions;
+using Foam.API.Files;
 
 namespace Foam.API.Commands
 {
@@ -17,7 +18,7 @@ namespace Foam.API.Commands
 
         public void Execute(JobRunner runner)
         {
-            throw new FoamException(Message ?? "The job forced an execution failure.");
+            throw new FoamException(Evaluator.Text(Message) ?? "The job forced an execution failure.");
         }
     }
 }

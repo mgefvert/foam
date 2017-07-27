@@ -2,6 +2,7 @@
 using System.Linq;
 using DotNetCommons;
 using Foam.API.Attributes;
+using Foam.API.Files;
 
 namespace Foam.API.Commands
 {
@@ -13,7 +14,7 @@ namespace Foam.API.Commands
         [PropertyDescription("Optional file mask specifies what files to read.")]
         public string Mask { get; set; }
         [PropertyDescription("Source location to read from.")]
-        public Uri Source { get; set; }
+        public string Source { get; set; }
 
         public void Initialize()
         {
@@ -21,9 +22,10 @@ namespace Foam.API.Commands
 
         public void Execute(JobRunner runner)
         {
-            var provider = runner.SelectProvider(Source);
+            var source = new Uri(Evaluator.Text(Source));
+            var provider = runner.SelectProvider(source);
 
-            var files = provider.Fetch(Source, Mask, runner.CommitBuffer);
+            var files = provider.Fetch(source, Evaluator.Text(Mask), runner.CommitBuffer);
             foreach (var file in files)
                 Logger.Log("Fetch: " + file);
 

@@ -96,6 +96,7 @@
     <Compile Include="Commands\ResetTest.cs" />
     <Compile Include="Commands\UnpackTest.cs" />
     <Compile Include="Commands\WriteTest.cs" />
+    <Compile Include="Files\EvaluatorTest.cs" />
     <Compile Include="Files\CompressorTest.cs" />
     <Compile Include="Memory\MySqlMemoryTest.cs" />
     <Compile Include="Memory\FileMemoryTest.cs" />

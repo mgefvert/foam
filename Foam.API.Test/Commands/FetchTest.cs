@@ -22,7 +22,7 @@ namespace Foam.API.Test.Commands
                 var cmd = new FetchCommand
                 {
                     Mask = "*.fetchdata",
-                    Source = new Uri(path)
+                    Source = path
                 };
                 cmd.Execute(runner);
 

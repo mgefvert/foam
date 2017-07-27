@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="Commands\FixMp4CreationDateTest.cs" />
     <Compile Include="Commands\GeocodePhotoTest.cs" />
+    <Compile Include="Commands\ReadExifTest.cs" />
     <Compile Include="Commands\ShrinkPhotoTest.cs" />
     <Compile Include="Commands\ShrinkVideoTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
