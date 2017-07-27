@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Text;
 using Foam.API.Commands;
 using Foam.API.Files;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

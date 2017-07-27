@@ -1,0 +1,25 @@
+﻿<?xml version="1.0"?>
+<foam xmlns="http://gefvert.org/xsd/foam">
+  <config>
+    <memory type="mysql" connectionString="Server=localhost; Database=foam; User=foam; Password=foam;"/>
+  </config>
+  <defaults>
+    <generate-random len="10"/>
+  </defaults>
+  <map name="testmap">
+  </map>
+  <job name="test-random-implicit">
+    <generate-random/>
+  </job>
+  <job name="test-random-explicit">
+    <generate-random len="20"/>
+  </job>
+  <group>
+    <defaults>
+      <generate-random len="1k"/>
+    </defaults>
+    <job name="test-random-sub">
+      <generate-random/>
+    </job>
+  </group>
+</foam>

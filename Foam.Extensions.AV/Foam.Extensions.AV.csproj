@@ -86,6 +86,9 @@
     <Compile Include="Commands\FixMp4CreationDateCommand.cs" />
     <Compile Include="Commands\ReadExifCommand.cs" />
     <Compile Include="Commands\GeocodePhotoCommand.cs" />
+    <Compile Include="Commands\ConvertImageCommand.cs" />
+    <Compile Include="Commands\SuperimposeTextCommand.cs" />
+    <Compile Include="Commands\SuperimposeImageCommand.cs" />
     <Compile Include="Commands\ShrinkVideoCommand.cs" />
     <Compile Include="Commands\ShrinkPhotoCommand.cs" />
     <Compile Include="Classes\ExifImage.cs" />

@@ -31,7 +31,7 @@ namespace Foam
 
                 Logger.Log("Loading configuration file " + opts.ConfigFile);
                 var jobconfig = new JobConfiguration(library);
-                jobconfig.LoadFromFile(opts.ConfigFile);
+                new JobXmlParser(jobconfig).Parse(opts.ConfigFile);
 
                 if (opts.ListCommands)
                 {

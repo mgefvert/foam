@@ -82,9 +82,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="foam.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="foam.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

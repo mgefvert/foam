@@ -95,7 +95,9 @@
     <Compile Include="Attributes\PropertyDescriptionAttribute.cs" />
     <Compile Include="Attributes\LongDescriptionAttribute.cs" />
     <Compile Include="Attributes\ShortDescriptionAttribute.cs" />
+    <Compile Include="Commands\EchoCommand.cs" />
     <Compile Include="Commands\FailCommand.cs" />
+    <Compile Include="Commands\GenerateRandomCommand.cs" />
     <Compile Include="Commands\ICompoundCommand.cs" />
     <Compile Include="Commands\ICommand.cs" />
     <Compile Include="Commands\IfNeq.cs" />
@@ -113,6 +115,7 @@
     <Compile Include="Commands\PackCommand.cs" />
     <Compile Include="Commands\WriteCommand.cs" />
     <Compile Include="Commands\FetchCommand.cs" />
+    <Compile Include="Configuration\JobXmlParser.cs" />
     <Compile Include="Configuration\Map.cs" />
     <Compile Include="Configuration\JobConfiguration.cs" />
     <Compile Include="Configuration\JobDefinition.cs" />

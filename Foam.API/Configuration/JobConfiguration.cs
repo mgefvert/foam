@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Xml;
-using System.Xml.Linq;
 using DotNetCommons;
 using Foam.API.Commands;
 using Foam.API.Exceptions;
@@ -13,18 +11,32 @@ namespace Foam.API.Configuration
 {
     public class JobConfiguration
     {
-        private const string Ns = "http://gefvert.org/xsd/foam";
-        private readonly ExtensionLibrary _library;
+        public ExtensionLibrary Library { get; }
         public List<JobDefinition> Jobs { get; } = new List<JobDefinition>();
         public List<Map> Maps { get; } = new List<Map>();
 
-        private string _memoryType;
-        private string _memoryConnectionString;
-        private string _memoryFilename;
+        public string MemoryType { get; set; }
+        public string MemoryConnectionString { get; set; }
+        public string MemoryFilename { get; set; }
 
         public JobConfiguration(ExtensionLibrary library)
         {
-            _library = library;
+            Library = library;
+        }
+
+        public IMemory CreateMemoryStorage()
+        {
+            switch (MemoryType)
+            {
+                case "file":
+                    return new FileMemory(MemoryFilename);
+
+                case "mysql":
+                    return new MySqlMemory(MemoryConnectionString);
+
+                default:
+                    throw new FoamException($"Unrecognized memory backend type: '{MemoryType}', valid options are 'file' or 'mysql'.");
+            }
         }
 
         public JobDefinition FindJob(string name)
@@ -32,111 +44,7 @@ namespace Foam.API.Configuration
             return Jobs.FirstOrDefault(x => x.Name.Like(name));
         }
 
-        public void LoadFromFile(string filename)
-        {
-            var xdoc = XDocument.Load(filename);
-            var xroot = xdoc.Root;
-            if (xroot == null)
-                throw ReadError(null, "Root node missing");
-
-            foreach(var xmap in xroot.Elements(XName.Get("maps", Ns)).Elements(XName.Get("map", Ns)))
-                Maps.AddIfNotNull(ParseMapNode(xmap));
-
-            foreach (var xjob in xroot.Elements(XName.Get("jobs", Ns)).Elements(XName.Get("job", Ns)))
-                Jobs.AddIfNotNull(ParseJobNode(xjob));
-
-            ParseConfigNode(xroot.Element(XName.Get("config", Ns)));
-        }
-
-        private Exception ReadError(XElement node, string message)
-        {
-            message += " in element " + (node?.Name ?? "<null>");
-
-            var lineInfo = node as IXmlLineInfo;
-            if (lineInfo?.HasLineInfo() ?? false)
-                message += " on line " + lineInfo.LineNumber;
-
-            return new FoamConfigurationException(message);
-        }
-
-        private void ParseConfigNode(XElement config)
-        {
-            if (config == null)
-                throw ReadError(null, "config node is missing.");
-
-            var memory = config.Element(XName.Get("memory", Ns));
-            if (memory != null)
-            {
-                _memoryType = memory.Attribute("type")?.Value;
-                _memoryConnectionString = memory.Attribute("connectionString")?.Value;
-                _memoryFilename = memory.Attribute("filename")?.Value;
-            }
-            else
-                throw ReadError(config, "memory node is missing.");
-        }
-
-        private Map ParseMapNode(XElement xmap)
-        {
-            var result = new Map
-            {
-                Name = xmap.Attribute("name")?.Value
-            };
-
-            if (string.IsNullOrEmpty(result.Name))
-                throw ReadError(xmap, "Map name is missing");
-
-            foreach (var xadd in xmap.Elements(XName.Get("add", Ns)))
-            {
-                var key = xadd.Attribute("key")?.Value ?? "";
-                var value = xadd.Attribute("value")?.Value ?? "";
-
-                result.Add(key, value);
-            }
-
-            return result;
-        }
-
-        private JobDefinition ParseJobNode(XElement xjob)
-        {
-            var result = new JobDefinition
-            {
-                Name = xjob.Attribute("name")?.Value,
-                Description = xjob.Attribute("description")?.Value
-            };
-
-            if (string.IsNullOrEmpty(result.Name))
-                throw ReadError(xjob, "Job name is missing");
-
-            foreach(var xcommand in xjob.Elements())
-                result.Commands.AddIfNotNull(ParseCommandNode(xcommand));
-
-            return result;
-        }
-
-        private ICommand ParseCommandNode(XElement xcommand)
-        {
-            var name = xcommand.Name.LocalName;
-            var cmd = _library.FindCommand(name);
-            if (cmd.Key == null)
-                throw ReadError(xcommand, $"Unable to find command '{name}'");
-
-            var result = Activator.CreateInstance(cmd.Value) as ICommand;
-            if (result == null)
-                throw ReadError(xcommand, "Unable to instantiate command of type " + cmd.Value.Name);
-
-            foreach (var xattr in xcommand.Attributes())
-                SetProperty(xcommand, result, xattr.Name.LocalName, xattr.Value);
-
-            if (xcommand.HasElements && result is ICompoundCommand compound)
-            {
-                foreach (var xsub in xcommand.Elements())
-                    compound.Commands.AddIfNotNull(ParseCommandNode(xsub));
-            }
-
-            return result;
-        }
-
-        private void SetProperty(XElement node, ICommand result, string name, string value)
+        public void SetProperty(ICommand result, string name, string value)
         {
             string Multiply(string numvalue, double multiplier)
             {
@@ -147,7 +55,7 @@ namespace Foam.API.Configuration
             var pname = name.Replace("-", "");
             var property = result.GetType().GetProperties().FirstOrDefault(p => p.Name.Like(pname));
             if (property == null)
-                throw ReadError(node, $"Undefined attribute '{name}'");
+                throw new FoamConfigurationException($"Undefined command attribute '{name}'");
 
             if (property.PropertyType == typeof(Uri))
             {
@@ -166,20 +74,6 @@ namespace Foam.API.Configuration
             }
 
             result.SetPropertyValue(property, value, CultureInfo.InvariantCulture);
-        }
-
-        public IMemory CreateMemoryStorage()
-        {
-            switch (_memoryType)
-            {
-                case "file":
-                    return new FileMemory(_memoryFilename);
-
-                case "mysql":
-                    return new MySqlMemory(_memoryConnectionString);
-            }
-
-            throw new FoamException($"Unrecognized memory backend type: '{_memoryType}', valid options are 'file' or 'mysql'.");
         }
     }
 }

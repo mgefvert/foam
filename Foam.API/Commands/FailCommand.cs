@@ -10,7 +10,7 @@ namespace Foam.API.Commands
     public class FailCommand : ICommand
     {
         [PropertyDescription("Message to display.")]
-        public string Message { get; set; }
+        public string Text { get; set; }
 
         public void Initialize()
         {
@@ -18,7 +18,7 @@ namespace Foam.API.Commands
 
         public void Execute(JobRunner runner)
         {
-            throw new FoamException(Evaluator.Text(Message) ?? "The job forced an execution failure.");
+            throw new FoamException(Evaluator.Text(Text) ?? "The job forced an execution failure.");
         }
     }
 }
