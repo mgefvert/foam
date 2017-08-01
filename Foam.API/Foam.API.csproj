@@ -104,7 +104,9 @@
     <Compile Include="Commands\IfEq.cs" />
     <Compile Include="Commands\IfSetCommand.cs" />
     <Compile Include="Commands\IfEmptyCommand.cs" />
+    <Compile Include="Commands\CallCommand.cs" />
     <Compile Include="Commands\ListCommand.cs" />
+    <Compile Include="Commands\SetConstCommand.cs" />
     <Compile Include="Commands\SetVarCommand.cs" />
     <Compile Include="Commands\MapVarCommand.cs" />
     <Compile Include="Commands\StopCommand.cs" />
@@ -125,6 +127,7 @@
     <Compile Include="Exceptions\FoamConfigurationException.cs" />
     <Compile Include="Files\Compressor.cs" />
     <Compile Include="Files\Evaluator.cs" />
+    <Compile Include="Files\Variables.cs" />
     <Compile Include="Files\FileItem.cs" />
     <Compile Include="Files\FileList.cs" />
     <Compile Include="ExtensionLibrary.cs" />

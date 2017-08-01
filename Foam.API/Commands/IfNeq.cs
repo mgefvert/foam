@@ -31,10 +31,10 @@ namespace Foam.API.Commands
         {
         }
 
-        public FileList Filter(FileList files)
+        public FileList Filter(FileList files, JobRunner runner)
         {
-            return new FileList(files.SelectFiles(Evaluator.Text(Mask))
-                .Where(f => !string.Equals(Value, Evaluator.Variable(Var, f), StringComparison.CurrentCultureIgnoreCase)));
+            return new FileList(files.SelectFiles(Evaluator.Text(Mask, null, runner.Constants))
+                .Where(f => !string.Equals(Value, Evaluator.Variable(Var, f, runner.Constants), StringComparison.CurrentCultureIgnoreCase)));
         }
     }
 }

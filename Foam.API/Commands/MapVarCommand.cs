@@ -36,17 +36,19 @@ namespace Foam.API.Commands
 
         public void Execute(JobRunner runner)
         {
-            var map = runner.Maps.GetOrDefault(Evaluator.Text(Map));
+            var map = runner.Maps.GetOrDefault(Evaluator.Text(Map, null, runner.Constants));
             if (map == null)
                 throw new FoamConfigurationException($"Undefined map '{Map}'.");
 
-            var files = runner.FileBuffer.SelectFiles(Evaluator.Text(Mask)).ToList();
+            var files = runner.FileBuffer.SelectFiles(Evaluator.Text(Mask, null, runner.Constants)).ToList();
             if (!files.Any())
                 return;
 
             foreach (var file in files)
             {
-                var lookup = !string.IsNullOrEmpty(Var) ? Evaluator.Variable(Var, file) : Evaluator.Text(Text, file);
+                var lookup = !string.IsNullOrEmpty(Var) 
+                    ? Evaluator.Variable(Var, file, runner.Constants) 
+                    : Evaluator.Text(Text, file, runner.Constants);
                 var result = map.GetOrDefault(lookup);
 
                 Logger.Debug($"map-var({file.Name}): value '{lookup}' maps to '{result}");

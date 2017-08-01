@@ -20,7 +20,7 @@ namespace Foam.API.Commands
 
         public void Execute(JobRunner runner)
         {
-            var files = runner.FileBuffer.SelectFiles(Evaluator.Text(Mask)).ToList();
+            var files = runner.FileBuffer.SelectFiles(Evaluator.Text(Mask, null, runner.Constants)).ToList();
 
             foreach (var file in files)
             {

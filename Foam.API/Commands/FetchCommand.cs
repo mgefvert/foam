@@ -22,10 +22,10 @@ namespace Foam.API.Commands
 
         public void Execute(JobRunner runner)
         {
-            var source = new Uri(Evaluator.Text(Source));
+            var source = new Uri(Evaluator.Text(Source, null, runner.Constants));
             var provider = runner.SelectProvider(source);
 
-            var files = provider.Fetch(source, Evaluator.Text(Mask), runner.CommitBuffer);
+            var files = provider.Fetch(source, Evaluator.Text(Mask, null, runner.Constants), runner.CommitBuffer);
             foreach (var file in files)
                 Logger.Log("Fetch: " + file);
 

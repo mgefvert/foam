@@ -18,7 +18,7 @@ namespace Foam.API.Commands
 
         public void Execute(JobRunner runner)
         {
-            throw new FoamException(Evaluator.Text(Text) ?? "The job forced an execution failure.");
+            throw new FoamException(Evaluator.Text(Text, null, runner.Constants) ?? "The job forced an execution failure.");
         }
     }
 }

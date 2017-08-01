@@ -183,6 +183,7 @@ namespace Foam
 
                         using (var runner = new JobRunner(settings))
                         {
+                            runner.CallJob += (sender, args) => args.Result = jobconfig.FindJob(args.JobName);
                             runner.Execute();
                         }
                     }

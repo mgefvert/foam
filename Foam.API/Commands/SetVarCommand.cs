@@ -22,6 +22,8 @@ namespace Foam.API.Commands
         public string Text { get; set; }
         [PropertyDescription("Optional regular expression to use (Singleline and IgnoreCase are used); the first matching group is used.")]
         public string Regex { get; set; }
+        [PropertyDescription("Optional value to set.")]
+        public string Value { get; set; }
         [PropertyDescription("Which variable that receives the mapping value.")]
         public string To { get; set; }
 
@@ -40,13 +42,15 @@ namespace Foam.API.Commands
 
         public void Execute(JobRunner runner)
         {
-            var files = runner.FileBuffer.SelectFiles(Evaluator.Text(Mask)).ToList();
+            var files = runner.FileBuffer.SelectFiles(Evaluator.Text(Mask, null, runner.Constants)).ToList();
             if (!files.Any())
                 return;
 
             foreach (var file in files)
             {
-                var source = !string.IsNullOrEmpty(Var) ? Evaluator.Variable(Var, file) : Evaluator.Text(Text, file);
+                var source = !string.IsNullOrEmpty(Var) 
+                    ? Evaluator.Variable(Var, file, runner.Constants)
+                    : Evaluator.Text(Text, file, runner.Constants);
 
                 if (_regex != null)
                 {

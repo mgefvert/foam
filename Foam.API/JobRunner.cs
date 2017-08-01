@@ -12,6 +12,14 @@ using Foam.API.Transactions;
 
 namespace Foam.API
 {
+    public class CallJobEventArgs : EventArgs
+    {
+        public string JobName { get; set; }
+        public JobDefinition Result { get; set; }
+    }
+
+    public delegate void CallJob(object sender, CallJobEventArgs args);
+
     public class JobRunner : IDisposable
     {
         private readonly JobDefinition _definition;
@@ -22,8 +30,11 @@ namespace Foam.API
         public string JobName { get; }
         public CommitBuffer CommitBuffer { get; } = new CommitBuffer();
         public FileList FileBuffer => _fileBufferStack.Peek();
+        public Variables Constants { get; } = new Variables();
         public Dictionary<string, Map> Maps { get; }
         public IMemory Memory { get; }
+
+        public event CallJob CallJob;
 
         public static JobRunner CreateDebugRunner()
         {
@@ -67,6 +78,20 @@ namespace Foam.API
         public void Dispose()
         {
             ShutdownProviders();
+        }
+
+        public void Call(string jobname)
+        {
+            if (CallJob == null)
+                throw new NullReferenceException("CallJob handler is not assigned.");
+
+            var args = new CallJobEventArgs { JobName = jobname };
+            CallJob(this, args);
+
+            if (args.Result == null)
+                throw new FoamException($"Job '{jobname}' not found.");
+
+            ExecuteCommands(args.Result.Commands);
         }
 
         public void Execute()
@@ -113,7 +138,7 @@ namespace Foam.API
 
                     if (cmd is ICompoundCommand compound)
                     {
-                        var filelist = compound.Filter(FileBuffer);
+                        var filelist = compound.Filter(FileBuffer, this);
                         if (filelist == null || filelist.Count == 0)
                             continue;
 
@@ -127,6 +152,24 @@ namespace Foam.API
                     Logger.Leave();
                 }
             }
+        }
+
+        public void PopFileBuffer()
+        {
+            if (_fileBufferStack.Count <= 1)
+                throw new FoamException("File buffer stack is empty.");
+
+            _fileBufferStack.Pop();
+        }
+
+        public void PushFileBuffer()
+        {
+            PushFileBuffer(new FileList(FileBuffer));
+        }
+
+        public void PushFileBuffer(FileList newlist)
+        {
+            _fileBufferStack.Push(newlist);
         }
 
         private void ReinitFileBuffer()
@@ -163,24 +206,6 @@ namespace Foam.API
                 Logger.Debug("Instantiating provider " + type.Name);
                 _providers.Add((IProvider) Activator.CreateInstance(type));
             }
-        }
-
-        public void PushFileBuffer()
-        {
-            PushFileBuffer(new FileList(FileBuffer));
-        }
-
-        public void PushFileBuffer(FileList newlist)
-        {
-            _fileBufferStack.Push(newlist);
-        }
-
-        public void PopFileBuffer()
-        {
-            if (_fileBufferStack.Count <= 1)
-                throw new FoamException("File buffer stack is empty.");
-
-            _fileBufferStack.Pop();
         }
     }
 }

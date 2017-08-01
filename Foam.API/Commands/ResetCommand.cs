@@ -18,7 +18,7 @@ namespace Foam.API.Commands
 
         public void Execute(JobRunner runner)
         {
-            var files = runner.FileBuffer.ExtractFiles(Evaluator.Text(Mask));
+            var files = runner.FileBuffer.ExtractFiles(Evaluator.Text(Mask, null, runner.Constants));
 
             Logger.Log($"Removed {files.Count} files from the file buffer");
         }

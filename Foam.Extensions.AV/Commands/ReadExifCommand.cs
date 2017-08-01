@@ -25,7 +25,7 @@ namespace Foam.Extensions.AV.Commands
 
         public void Execute(JobRunner runner)
         {
-            foreach(var file in runner.FileBuffer.SelectFiles(Evaluator.Text(Mask)))
+            foreach(var file in runner.FileBuffer.SelectFiles(Evaluator.Text(Mask, null, runner.Constants)))
                 Logger.Catch(() => ReadExif(file));
         }
 

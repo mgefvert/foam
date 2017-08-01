@@ -50,8 +50,7 @@ namespace Foam.API.Commands
 
         public void Execute(JobRunner runner)
         {
-            var files = runner.FileBuffer.SelectFiles(Evaluator.Text(Mask)).ToList();
-
+            var files = runner.FileBuffer.SelectFiles(Evaluator.Text(Mask, null, runner.Constants)).ToList();
             if (!files.Any())
             {
                 Logger.Log("List: No files to list.");
@@ -65,7 +64,7 @@ namespace Foam.API.Commands
             }
 
             if (Url != null)
-                ListToHttp(files, runner.JobName, new Uri(Evaluator.Text(Url)));
+                ListToHttp(files, runner.JobName, new Uri(Evaluator.Text(Url, null, runner.Constants)));
 
             if (!string.IsNullOrEmpty(ToEmail))
                 ListToEmail(files, runner.JobName, ToEmail, FromEmail ?? ConfigurationManager.AppSettings["default-email"]);

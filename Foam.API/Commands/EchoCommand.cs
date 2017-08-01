@@ -18,7 +18,7 @@ namespace Foam.API.Commands
 
         public void Execute(JobRunner runner)
         {
-            Logger.Log(Evaluator.Text(Text));
+            Logger.Log(Evaluator.Text(Text, null, runner.Constants));
         }
     }
 }

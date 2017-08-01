@@ -23,10 +23,10 @@ namespace Foam.API.Commands
 
         public void Execute(JobRunner runner)
         {
-            var target = new Uri(Evaluator.Text(Target));
+            var target = new Uri(Evaluator.Text(Target, null, runner.Constants));
 
             var provider = runner.SelectProvider(target);
-            var files = runner.FileBuffer.SelectFiles(Evaluator.Text(Mask)).ToList();
+            var files = runner.FileBuffer.SelectFiles(Evaluator.Text(Mask, null, runner.Constants)).ToList();
 
             provider.Write(target, files, runner.CommitBuffer, Overwrite);
         }

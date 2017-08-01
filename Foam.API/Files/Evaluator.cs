@@ -19,7 +19,7 @@ namespace Foam.API.Files
             new TokenStringDefinition("}", TokenVarEnd, false)
         });
 
-        public static string Text(string text, FileItem file = null)
+        public static string Text(string text, FileItem file, Variables constants)
         {
             var list = Parser.Tokenize(text);
             var inVar = false;
@@ -28,7 +28,7 @@ namespace Foam.API.Files
                 switch (token.Value)
                 {
                     case TokenText:
-                        result.Append(inVar ? Variable(token.Text.Trim(), file) : token.Text);
+                        result.Append(inVar ? Variable(token.Text.Trim(), file, constants) : token.Text);
                         break;
 
                     case TokenVarStart:
@@ -48,7 +48,7 @@ namespace Foam.API.Files
             return result.ToString();
         }
 
-        public static string Variable(string variable, FileItem file = null)
+        public static string Variable(string variable, FileItem file, Variables constants)
         {
             if (string.IsNullOrWhiteSpace(variable))
                 return null;
@@ -90,7 +90,10 @@ namespace Foam.API.Files
                     return DateTime.UtcNow.ToString("yyyyMMdd-HHmmss");
 
                 default:
-                    return file?.Variables.GetOrDefault(variable);
+                    var result = file?.Variables.GetOrDefault(variable);
+                    if (string.IsNullOrEmpty(result))
+                        result = constants?.GetOrDefault(variable);
+                    return result;
             }
         }
     }
