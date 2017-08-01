@@ -5,6 +5,7 @@ using DotNetCommons;
 using Foam.API;
 using Foam.API.Attributes;
 using Foam.API.Commands;
+using Foam.API.Exceptions;
 using Foam.API.Files;
 using Foam.API.Memory;
 using Foam.Extensions.AV.Classes;
@@ -25,6 +26,8 @@ namespace Foam.Extensions.AV.Commands
 
         public void Initialize()
         {
+            if (string.IsNullOrEmpty(ApiKey))
+                throw new FoamConfigurationException("geocode-photo must have an API key.");
         }
 
         public void Execute(JobRunner runner)

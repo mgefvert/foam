@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
+using ExifLib;
 using Foam.API;
 using Foam.API.Files;
 using Foam.Extensions.AV.Commands;
@@ -20,6 +21,8 @@ namespace Foam.Extensions.AV.Test.Commands
                 runner.FileBuffer.Add(new FileItem("test.jpg", dt,
                     Assembly.GetExecutingAssembly().GetManifestResourceStream("Foam.Extensions.AV.Test.TestData.test.jpg")));
 
+                AssertHasExifData(runner.FileBuffer[0].Data);
+
                 var cmd = new ShrinkPhotoCommand { PixelLimit = 1048576 };
                 cmd.Initialize();
                 cmd.Execute(runner);
@@ -29,6 +32,16 @@ namespace Foam.Extensions.AV.Test.Commands
                 var file = runner.FileBuffer.Single();
                 Assert.AreEqual(dt, file.Timestamp);
                 Assert.IsTrue(file.Length < 131072);
+                AssertHasExifData(file.Data);
+            }
+        }
+
+        private void AssertHasExifData(ReadOnlyByteBuffer data)
+        {
+            using (var reader = new ExifReader(data.GetReadOnlyStream()))
+            {
+                reader.GetTagValue<string>(ExifTags.Model, out var model);
+                Assert.IsFalse(string.IsNullOrEmpty(model));
             }
         }
     }

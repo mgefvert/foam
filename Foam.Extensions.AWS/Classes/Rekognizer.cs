@@ -49,7 +49,7 @@ namespace Foam.Extensions.AWS.Classes
 
             // Process labels
 
-            var labels = DetectLabels(img, 80).Select(x => new Tag(x.Name, x.Confidence)).ToList();
+            var labels = DetectLabels(img, 90).Select(x => new Tag(x.Name, x.Confidence)).ToList();
             Logger.Debug("Labels = " + string.Join(", ", labels));
             tags.AddRangeIfNotNull(labels);
 

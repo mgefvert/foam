@@ -35,6 +35,8 @@ namespace Foam.API.Commands
                 throw new FoamConfigurationException("Either 'var' or 'text' must be defined.");
             if (string.IsNullOrEmpty(To))
                 throw new FoamConfigurationException("No target variable 'to' is defined.");
+            if (Evaluator.IsReserved(To))
+                throw new FoamConfigurationException($"The variable '{To}' is reserved and may not be assigned.");
 
             if (!string.IsNullOrEmpty(Regex))
                 _regex = new Regex(Regex, RegexOptions.IgnoreCase | RegexOptions.Singleline);

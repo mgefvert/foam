@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using DotNetCommons;
@@ -12,6 +13,24 @@ namespace Foam.API.Files
         private const int TokenVarStart = 1;
         private const int TokenVarEnd = 2;
 
+        private static readonly List<string> Reserved = new List<string>
+        {
+            "filename",
+            "filename-noext",
+            "fileext",
+            "filesize",
+            "filedate",
+            "filecrc",
+            "date",
+            "today",
+            "time",
+            "now",
+            "utcdate",
+            "utctoday",
+            "utctime",
+            "utcnow"
+        };
+
         private static readonly StringTokenizer Parser = new StringTokenizer(new TokenDefinition[]
         {
             new TokenCharacterModeDefinition(TokenMode.Any, TokenText, false),
@@ -22,6 +41,9 @@ namespace Foam.API.Files
         public static string Text(string text, FileItem file, Variables constants)
         {
             var list = Parser.Tokenize(text);
+            if (list == null || list.Count == 0)
+                return null;
+
             var inVar = false;
             var result = new StringBuilder();
             foreach (var token in list)
@@ -95,6 +117,11 @@ namespace Foam.API.Files
                         result = constants?.GetOrDefault(variable);
                     return result;
             }
+        }
+
+        public static bool IsReserved(string to)
+        {
+            return Reserved.Contains((to ?? "").ToLower());
         }
     }
 }

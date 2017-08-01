@@ -57,6 +57,9 @@ namespace Foam.API.Providers
         public void Write(Uri location, List<FileItem> files, CommitBuffer commitBuffer, OverwriteMode overwrite)
         {
             var path = location.LocalPath;
+            if (!Directory.Exists(path))
+                Directory.CreateDirectory(path);
+
             foreach (var file in files)
             {
                 var filename = Path.Combine(path, file.Name);

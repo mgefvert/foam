@@ -32,6 +32,8 @@ namespace Foam.API.Commands
                 throw new FoamConfigurationException("No 'map' is defined.");
             if (string.IsNullOrEmpty(To))
                 throw new FoamConfigurationException("No target variable 'to' is defined.");
+            if (Evaluator.IsReserved(To))
+                throw new FoamConfigurationException($"The variable '{To}' is reserved and may not be assigned.");
         }
 
         public void Execute(JobRunner runner)
@@ -51,7 +53,7 @@ namespace Foam.API.Commands
                     : Evaluator.Text(Text, file, runner.Constants);
                 var result = map.GetOrDefault(lookup);
 
-                Logger.Debug($"map-var({file.Name}): value '{lookup}' maps to '{result}");
+                Logger.Debug($"map-var({file.Name}): value '{lookup}' maps to '{result}'");
                 file.Variables[To] = result;
             }
         }

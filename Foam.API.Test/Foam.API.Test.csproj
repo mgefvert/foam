@@ -91,6 +91,7 @@
     <Compile Include="Commands\FailTest.cs" />
     <Compile Include="Commands\FetchTest.cs" />
     <Compile Include="Commands\ListTest.cs" />
+    <Compile Include="Commands\SetVarTest.cs" />
     <Compile Include="Commands\PackTest.cs" />
     <Compile Include="Commands\PushPopTest.cs" />
     <Compile Include="Commands\ResetTest.cs" />

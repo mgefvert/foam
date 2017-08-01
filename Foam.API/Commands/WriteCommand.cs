@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Foam.API.Attributes;
 using Foam.API.Configuration;
@@ -23,12 +24,25 @@ namespace Foam.API.Commands
 
         public void Execute(JobRunner runner)
         {
-            var target = new Uri(Evaluator.Text(Target, null, runner.Constants));
+            var groups = new Dictionary<string, FileList>();
 
-            var provider = runner.SelectProvider(target);
+            // Evaluate target destination from variables and group
             var files = runner.FileBuffer.SelectFiles(Evaluator.Text(Mask, null, runner.Constants)).ToList();
+            foreach (var file in files)
+            {
+                var target = Evaluator.Text(Target, file, runner.Constants);
+                if (!groups.ContainsKey(target))
+                    groups[target] = new FileList();
+                groups[target].Add(file);
+            }
 
-            provider.Write(target, files, runner.CommitBuffer, Overwrite);
+            // For each target group, select provider and write
+            foreach (var group in groups)
+            {
+                var target = new Uri(group.Key);
+                var provider = runner.SelectProvider(target);
+                provider.Write(target, group.Value, runner.CommitBuffer, Overwrite);
+            }
         }
     }
 }
