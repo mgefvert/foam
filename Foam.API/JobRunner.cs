@@ -22,17 +22,17 @@ namespace Foam.API
 
     public class JobRunner : IDisposable
     {
-        private readonly JobDefinition _definition;
-        private readonly ExtensionLibrary _library;
-        private readonly List<IProvider> _providers = new List<IProvider>();
         private readonly Stack<FileList> _fileBufferStack = new Stack<FileList>();
 
         public string JobName { get; }
         public CommitBuffer CommitBuffer { get; } = new CommitBuffer();
-        public FileList FileBuffer => _fileBufferStack.Peek();
         public Variables Constants { get; } = new Variables();
+        public FileList FileBuffer => _fileBufferStack.Peek();
+        public JobDefinition Definition { get; }
+        public ExtensionLibrary Library { get; }
         public Dictionary<string, Map> Maps { get; }
         public IMemory Memory { get; }
+        public List<IProvider> Providers { get; } = new List<IProvider>();
 
         public event CallJob CallJob;
 
@@ -57,14 +57,14 @@ namespace Foam.API
 
         public JobRunner(JobRunnerSettings settings)
         {
-            _definition = settings.Definition;
-            _library = settings.Library;
+            Definition = settings.Definition;
+            Library = settings.Library;
 
             Maps = settings.Maps?.ToDictionary(x => x.Name, StringComparer.CurrentCultureIgnoreCase)
                    ?? new Dictionary<string, Map>();
 
             Memory = settings.Memory;
-            JobName = _definition.Name;
+            JobName = Definition.Name;
 
             StartProviders();
             ReinitFileBuffer();
@@ -97,7 +97,7 @@ namespace Foam.API
         public void Execute()
         {
             // Make sure we're ready to go
-            foreach (var cmd in _definition.Commands)
+            foreach (var cmd in Definition.Commands)
                 cmd.Initialize();
 
             try
@@ -105,7 +105,7 @@ namespace Foam.API
                 ReinitFileBuffer();
                 try
                 {
-                    ExecuteCommands(_definition.Commands);
+                    ExecuteCommands(Definition.Commands);
                 }
                 catch (FoamStopJobException)
                 {
@@ -115,7 +115,7 @@ namespace Foam.API
             }
             catch (Exception ex)
             {
-                Logger.Err($"{ex.GetType().Name} occurred while running job {_definition.Name}: {ex.Message}");
+                Logger.Err($"{ex.GetType().Name} occurred while running job {Definition.Name}: {ex.Message}");
                 CommitBuffer.Rollback();
                 Logger.Err("Job aborted.");
             }
@@ -139,7 +139,7 @@ namespace Foam.API
                     if (cmd is ICompoundCommand compound)
                     {
                         var filelist = compound.Filter(FileBuffer, this);
-                        if (filelist == null || filelist.Count == 0)
+                        if (filelist == null)
                             continue;
 
                         PushFileBuffer(filelist);
@@ -181,18 +181,18 @@ namespace Foam.API
 
         public IProvider SelectProvider(Uri source)
         {
-            var result = _providers.FirstOrDefault(p => p.CanHandleUri(source));
+            var result = Providers.FirstOrDefault(p => p.CanHandleUri(source));
             if (result != null)
                 return result;
 
-            result = _providers.FirstOrDefault(p => p.CanHandleProtocol(source.Scheme));
+            result = Providers.FirstOrDefault(p => p.CanHandleProtocol(source.Scheme));
 
             return result ?? throw new FoamException("Unable to find a provider for location " + source);
         }
 
         private void ShutdownProviders()
         {
-            foreach (var provider in _providers.ExtractAll(x => true))
+            foreach (var provider in Providers.ExtractAll(x => true))
             {
                 Logger.Debug("Shutting down provider " + provider.GetType().Name);
                 provider.Dispose();
@@ -201,10 +201,10 @@ namespace Foam.API
 
         private void StartProviders()
         {
-            foreach (var type in _library.LoadedAssemblies.SelectMany(x => x.Providers))
+            foreach (var type in Library.LoadedAssemblies.SelectMany(x => x.Providers))
             {
                 Logger.Debug("Instantiating provider " + type.Name);
-                _providers.Add((IProvider) Activator.CreateInstance(type));
+                Providers.Add((IProvider) Activator.CreateInstance(type));
             }
         }
     }

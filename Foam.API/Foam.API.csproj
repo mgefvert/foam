@@ -102,6 +102,8 @@
     <Compile Include="Commands\ICommand.cs" />
     <Compile Include="Commands\IfNeq.cs" />
     <Compile Include="Commands\IfEq.cs" />
+    <Compile Include="Commands\SelectBaseCommand.cs" />
+    <Compile Include="Commands\SelectCommand.cs" />
     <Compile Include="Commands\IfSetCommand.cs" />
     <Compile Include="Commands\IfEmptyCommand.cs" />
     <Compile Include="Commands\CallCommand.cs" />

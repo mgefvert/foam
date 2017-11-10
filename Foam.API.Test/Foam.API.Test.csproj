@@ -88,14 +88,19 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\EchoTest.cs" />
+    <Compile Include="Commands\GenerateRandomTest.cs" />
+    <Compile Include="Commands\IfTest.cs" />
+    <Compile Include="Commands\MapVarTest.cs" />
+    <Compile Include="Commands\SetConstTest.cs" />
+    <Compile Include="Commands\CallTest.cs" />
     <Compile Include="Commands\FailTest.cs" />
     <Compile Include="Commands\FetchTest.cs" />
     <Compile Include="Commands\ListTest.cs" />
     <Compile Include="Commands\SetVarTest.cs" />
-    <Compile Include="Commands\PackTest.cs" />
+    <Compile Include="Commands\PackUnpackTest.cs" />
     <Compile Include="Commands\PushPopTest.cs" />
     <Compile Include="Commands\ResetTest.cs" />
-    <Compile Include="Commands\UnpackTest.cs" />
     <Compile Include="Commands\WriteTest.cs" />
     <Compile Include="Configuration\JobXmlParserTest.cs" />
     <Compile Include="Files\EvaluatorTest.cs" />
@@ -114,6 +119,10 @@
     <EmbeddedResource Include="TestData\files.zip" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\DotNetCommons\DotNetCommons\DotNetCommons.csproj">
+      <Project>{A86D8B8B-D601-4EB9-AA0A-E03372ACC104}</Project>
+      <Name>DotNetCommons</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Foam.API\Foam.API.csproj">
       <Project>{3D4BDE90-D993-4133-A5B3-9FD114F89C9B}</Project>
       <Name>Foam.API</Name>

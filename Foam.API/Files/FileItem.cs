@@ -11,6 +11,7 @@ namespace Foam.API.Files
         public string OriginalFullName { get; set; }
         public DateTimeOffset Timestamp { get; set; }
         public ReadOnlyByteBuffer Data { get; private set; }
+        public bool Selected { get; set; }
 
         public int Crc32 => Data.CalcCrc32();
         public int Length => Data.Length;

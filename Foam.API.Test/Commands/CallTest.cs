@@ -4,7 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Foam.API.Test.Commands
 {
     [TestClass]
-    public class UnpackTest
+    public class CallTest
     {
         [TestMethod]
         public void Test()
