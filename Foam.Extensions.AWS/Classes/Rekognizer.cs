@@ -8,6 +8,7 @@ using Amazon.Rekognition;
 using Amazon.Rekognition.Model;
 using Amazon.Runtime;
 using DotNetCommons;
+using DotNetCommons.Logger;
 using DotNetCommons.WinForms.Graphics;
 using Foam.API.Files;
 using Image = Amazon.Rekognition.Model.Image;

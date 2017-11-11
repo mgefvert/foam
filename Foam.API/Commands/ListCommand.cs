@@ -8,6 +8,7 @@ using System.Net.Mail;
 using System.Runtime.Serialization.Json;
 using System.Text;
 using DotNetCommons;
+using DotNetCommons.Logger;
 using Foam.API.Attributes;
 using Foam.API.Files;
 

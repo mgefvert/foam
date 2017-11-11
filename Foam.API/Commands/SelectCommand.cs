@@ -15,5 +15,9 @@ namespace Foam.API.Commands
         public FilterOperation Op { get; set; } = FilterOperation.Eq;
         [PropertyDescription("Optional value to match against")]
         public string Value { get; set; }
+
+        public SelectCommand(string var, FilterOperation op, string value) : base(var, op, value)
+        {
+        }
     }
 }

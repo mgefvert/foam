@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using DotNetCommons;
+using DotNetCommons.Logger;
 using Foam.API;
 using Foam.API.Attributes;
 using Foam.API.Configuration;
@@ -14,7 +15,7 @@ namespace Foam
         private static int Main()
         {
             Logger.Configuration.EchoToConsole = true;
-            Logger.Configuration.FileNaming = LogFileNaming.Monthly;
+            Logger.Configuration.Rotation = LogRotation.Monthly;
             Logger.Notice("File Organizer And Mover " + Assembly.GetExecutingAssembly().GetName().Version);
 
             var result = 0;
@@ -50,7 +51,7 @@ namespace Foam
             }
             catch (CommandLineDisplayHelpException ex)
             {
-                Logger.Warn("No parameters on command line; displaying help.");
+                Logger.Warning("No parameters on command line; displaying help.");
                 Console.Error.WriteLine();
                 Console.Error.WriteLine(ex.Message);
                 result = 1;
@@ -59,8 +60,8 @@ namespace Foam
             {
                 using (new SetConsoleColor(ConsoleColor.Red))
                 {
-                    Logger.Err("An unhandled exception occurred:");
-                    Logger.Err(ex);
+                    Logger.Error("An unhandled exception occurred:");
+                    Logger.Error(ex);
                 }
                 result = 1;
             }
@@ -166,11 +167,11 @@ namespace Foam
                     var jobdefinition = jobconfig.FindJob(jobname);
                     if (jobdefinition == null)
                     {
-                        Logger.Err($"Unable to find job '{jobname}' in job list");
+                        Logger.Error($"Unable to find job '{jobname}' in job list");
                         continue;
                     }
 
-                    Logger.Enter("Starting job " + jobdefinition.Name, LogSeverity.Notice);
+                    Logger.Log("Starting job " + jobdefinition.Name, LogSeverity.Notice);
                     try
                     {
                         var settings = new JobRunnerSettings
@@ -189,7 +190,7 @@ namespace Foam
                     }
                     finally
                     {
-                        Logger.Leave("Job finished");
+                        Logger.Log("Job finished");
                     }
                 }
             }

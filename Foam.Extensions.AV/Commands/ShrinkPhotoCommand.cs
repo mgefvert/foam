@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using DotNetCommons;
+using DotNetCommons.Logger;
 using DotNetCommons.WinForms.Graphics;
 using Foam.API;
 using Foam.API.Attributes;
@@ -64,7 +65,7 @@ namespace Foam.Extensions.AV.Commands
                         var pct = (int)(newLen / (float)oldLen * 100);
                         if (pct <= 1)
                         {
-                            Logger.Warn($"{file.Name}: Compression with over 99%; possible malfunction. Skipping.");
+                            Logger.Warning($"{file.Name}: Compression with over 99%; possible malfunction. Skipping.");
                             return;
                         }
 
@@ -82,7 +83,7 @@ namespace Foam.Extensions.AV.Commands
             }
             catch (Exception ex)
             {
-                Logger.Err($"{file.Name}: {ex.Message}");
+                Logger.Error($"{file.Name}: {ex.Message}");
             }
         }
     }

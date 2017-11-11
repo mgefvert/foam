@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using DotNetCommons;
+using DotNetCommons.Logger;
 using Foam.API.Commands;
 using Foam.API.Providers;
 

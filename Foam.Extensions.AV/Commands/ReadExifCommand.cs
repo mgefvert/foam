@@ -3,6 +3,7 @@ using System.Collections;
 using System.Globalization;
 using System.Linq;
 using DotNetCommons;
+using DotNetCommons.Logger;
 using ExifLib;
 using Foam.API;
 using Foam.API.Attributes;

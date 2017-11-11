@@ -1,5 +1,6 @@
 ﻿using System;
 using DotNetCommons;
+using DotNetCommons.Logger;
 using Foam.API.Commands;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -20,7 +21,7 @@ namespace Foam.API.Test.Commands
                     Text = "Hello, world!"
                 };
 
-                Logger.LogEvent += LoggerOnLogEvent;
+                Logger.LogChannel.LogEvent += LoggerOnLogEvent;
                 try
                 {
                     _gotHelloWorld = false;
@@ -29,14 +30,14 @@ namespace Foam.API.Test.Commands
                 }
                 finally
                 {
-                    Logger.LogEvent -= LoggerOnLogEvent;
+                    Logger.LogChannel.LogEvent -= LoggerOnLogEvent;
                 }
             }
         }
 
-        private void LoggerOnLogEvent(LogSeverity severity, string text)
+        private void LoggerOnLogEvent(object channel, LogEntry entry)
         {
-            _gotHelloWorld |= text.ToLower().Contains("hello, world");
+            _gotHelloWorld |= entry.Message.ToLower().Contains("hello, world");
         }
     }
 }

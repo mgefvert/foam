@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Text.RegularExpressions;
 using DotNetCommons;
+using DotNetCommons.Logger;
 using Foam.API.Attributes;
 using Foam.API.Exceptions;
 using Foam.API.Files;

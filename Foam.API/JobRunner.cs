@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using DotNetCommons;
+using DotNetCommons.Logger;
 using Foam.API.Commands;
 using Foam.API.Configuration;
 using Foam.API.Exceptions;
@@ -115,9 +116,9 @@ namespace Foam.API
             }
             catch (Exception ex)
             {
-                Logger.Err($"{ex.GetType().Name} occurred while running job {Definition.Name}: {ex.Message}");
+                Logger.Error($"{ex.GetType().Name} occurred while running job {Definition.Name}: {ex.Message}");
                 CommitBuffer.Rollback();
-                Logger.Err("Job aborted.");
+                Logger.Error("Job aborted.");
             }
             finally
             {

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
 using DotNetCommons;
+using DotNetCommons.Logger;
 using Foam.API.Commands;
 using Foam.API.Exceptions;
 
@@ -98,7 +99,7 @@ namespace Foam.API.Configuration
                 else if (xnode.Name != DefaultsName)
                 {
                     var lineInfo = (IXmlLineInfo)xnode;
-                    Logger.Warn($"Unrecognized element {xnode.Name.LocalName} at {lineInfo.LineNumber}:{lineInfo.LinePosition}");
+                    Logger.Warning($"Unrecognized element {xnode.Name.LocalName} at {lineInfo.LineNumber}:{lineInfo.LinePosition}");
                 }
             }
         }

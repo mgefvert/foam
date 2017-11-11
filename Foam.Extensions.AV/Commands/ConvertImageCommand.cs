@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using DotNetCommons;
+using DotNetCommons.Logger;
 using Foam.API;
 using Foam.API.Attributes;
 using Foam.API.Commands;

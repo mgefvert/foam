@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using Amazon;
 using DotNetCommons;
+using DotNetCommons.Logger;
 using DotNetCommons.WinForms.Graphics;
 using Foam.API;
 using Foam.API.Attributes;

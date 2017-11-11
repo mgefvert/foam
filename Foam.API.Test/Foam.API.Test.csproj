@@ -119,6 +119,10 @@
     <EmbeddedResource Include="TestData\files.zip" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\DotNetCommons\DotNetCommons.Logger\DotNetCommons.Logger.csproj">
+      <Project>{119BC413-9C40-4ECB-ADD4-A04DF7261B85}</Project>
+      <Name>DotNetCommons.Logger</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\DotNetCommons\DotNetCommons\DotNetCommons.csproj">
       <Project>{A86D8B8B-D601-4EB9-AA0A-E03372ACC104}</Project>
       <Name>DotNetCommons</Name>

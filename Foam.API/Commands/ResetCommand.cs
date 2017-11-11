@@ -1,5 +1,6 @@
 ﻿using System;
 using DotNetCommons;
+using DotNetCommons.Logger;
 using Foam.API.Attributes;
 using Foam.API.Files;
 

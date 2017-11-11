@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using DotNetCommons;
+using DotNetCommons.Logger;
 using Foam.API.Configuration;
 using Foam.API.Files;
 using Foam.API.Transactions;
@@ -27,7 +28,7 @@ namespace Foam.API.Providers
                 Logger.Log($"{GetType().Name}: File {filespec} deleted");
             }
             else
-                Logger.Warn($"{GetType().Name}.Delete: File {filespec} does not exist");
+                Logger.Warning($"{GetType().Name}.Delete: File {filespec} does not exist");
         }
 
         public FileList Fetch(Uri location, string mask, CommitBuffer commitBuffer)

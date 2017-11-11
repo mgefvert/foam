@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using DotNetCommons;
+using DotNetCommons.Logger;
 using Foam.API.Providers;
 
 namespace Foam.API.Transactions
@@ -46,7 +47,7 @@ namespace Foam.API.Transactions
                 }
                 catch (Exception e)
                 {
-                    Logger.Warn($"Unable to commit {item}: {e.Message}");
+                    Logger.Warning($"Unable to commit {item}: {e.Message}");
                 }
             }
         }
@@ -66,7 +67,7 @@ namespace Foam.API.Transactions
                 }
                 catch (Exception e)
                 {
-                    Logger.Warn($"Unable to roll back {item}: {e.Message}");
+                    Logger.Warning($"Unable to roll back {item}: {e.Message}");
                 }
             }
         }

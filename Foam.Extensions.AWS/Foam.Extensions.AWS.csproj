@@ -91,6 +91,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\DotNetCommons\DotNetCommons.Logger\DotNetCommons.Logger.csproj">
+      <Project>{119BC413-9C40-4ECB-ADD4-A04DF7261B85}</Project>
+      <Name>DotNetCommons.Logger</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\DotNetCommons\DotNetCommons.WinForms\DotNetCommons.WinForms.csproj">
       <Project>{716AE81D-1017-462D-A5CD-5C57A68D0C0C}</Project>
       <Name>DotNetCommons.WinForms</Name>

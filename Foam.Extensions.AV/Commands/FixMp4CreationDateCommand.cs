@@ -2,6 +2,7 @@
 using System.IO;
 using System.Text;
 using DotNetCommons;
+using DotNetCommons.Logger;
 using Foam.API;
 using Foam.API.Attributes;
 using Foam.API.Commands;
@@ -34,7 +35,7 @@ namespace Foam.Extensions.AV.Commands
         {
             if (file.Data.GetText(4, 4, Encoding.Default) != "ftyp")
             {
-                Logger.Warn($"File {file.Name} has a unrecognized header, likely not an MP4 file");
+                Logger.Warning($"File {file.Name} has a unrecognized header, likely not an MP4 file");
                 return;
             }
 

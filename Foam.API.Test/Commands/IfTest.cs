@@ -1,5 +1,6 @@
 ﻿using System;
 using DotNetCommons;
+using DotNetCommons.Logger;
 using Foam.API.Commands;
 using Foam.API.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -17,13 +18,13 @@ namespace Foam.API.Test.Commands
         {
             _success = false;
             _runner = JobRunner.CreateDebugRunner();
-            Logger.LogEvent += LogEvent;
+            Logger.LogChannel.LogEvent += LogEvent;
         }
 
         [TestCleanup]
         public void Teardown()
         {
-            Logger.LogEvent -= LogEvent;
+            Logger.LogChannel.LogEvent -= LogEvent;
             _runner.Dispose();
         }
 
@@ -43,9 +44,9 @@ namespace Foam.API.Test.Commands
             Assert.IsTrue(_success);
         }
 
-        private void LogEvent(LogSeverity severity, string text)
+        private void LogEvent(object channel, LogEntry entry)
         {
-            _success |= text.Contains("success");
+            _success |= entry.Message.Contains("success");
         }
     }
 }
